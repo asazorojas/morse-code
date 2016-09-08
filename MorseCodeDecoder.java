@@ -32,17 +32,29 @@ public class MorseCodeDecoder {
      * 
      * @param bits 
      */
-    private static void setTimeUnit(String bits) {
-        String[] b = bits.split("1+");
-        int l = b[1].length();
-        for (int i = 2; i < b.length - 1; i++) {
-            int t = b[i].length();
-            if (t != l) {
-                l = Math.min(l,t);
+    private static int getTimeUnit(String bits) {
+        String[] o = bits.split("0+");
+        if (o.length == 1) return bits.length(); //bits is all 1's, so E
+        int os = o[0].length();
+        for (int i = 1; i < o.length - 1; i++) {
+            System.out.println(o[i]);
+            int t = o[i].length();
+            if (t != os) {
+                os = Math.min(os,t);
                 break;
             }
         }
-        tu = l;
+        String[] z = bits.split("1+");
+        int zs = z[1].length();
+        for (int i = 2; i < z.length - 1; i++) {
+            System.out.println(z[i]);
+            int t = z[i].length();
+            if (t != zs) {
+                zs = Math.min(zs,t);
+                break;
+            }
+        }
+        return Math.min(os,zs);
     }
     
     /**
@@ -88,7 +100,7 @@ public class MorseCodeDecoder {
         String morse = "";
         bits = bits.replaceAll("^[0]+", "");
         bits = bits.replaceAll("[0]+$", "");
-        setTimeUnit(bits);
+        tu = getTimeUnit(bits);
         String[] ones = bits.split("0+");
         String[] zeros = bits.split("1+");
         for (int i = 0; i < zeros.length - 1; i++) {
@@ -124,8 +136,8 @@ public class MorseCodeDecoder {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
-//        MorseCodeDecoder.setTimeUnit(bits);
+        String bits = "1";
+//        MorseCodeDecoder.getTimeUnit(bits);
         String morse = MorseCodeDecoder.decodeBits(bits);
         String msg = MorseCodeDecoder.decodeMorse(morse);
         System.out.println(msg);
