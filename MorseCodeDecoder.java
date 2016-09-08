@@ -92,11 +92,8 @@ public class MorseCodeDecoder {
         String[] ones = bits.split("0+");
         String[] zeros = bits.split("1+");
         for (int i = 0; i < zeros.length - 1; i++) {
-            System.out.print(ones[i]);
-            System.out.println(zeros[i + 1]);
             morse += nextTele(ones[i], zeros[i + 1]);
         }
-        System.out.println(ones[ones.length - 1]);
         morse += nextTele(ones[ones.length - 1]);
         return morse;
     }
