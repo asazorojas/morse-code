@@ -24,7 +24,9 @@ import java.util.Scanner;
 public class MorseCodeDecoder {
     
     public static String decodeBits(String bits) {
-        return ".";
+        bits = bits.replaceAll("^[0]+", "");
+        bits = bits.replaceAll("[0]+$", "");
+        return bits;
     }
     
     public static String decodeMorse(String morseCode) {
@@ -51,8 +53,11 @@ public class MorseCodeDecoder {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println(
-                MorseCodeDecoder.decode(".... . -.--   .--- ..- -.. ."));
+        String bits = "000000110011001100110000001100000011111100110011111100111111000000000000001100111111001111110011111100000011001100111111000000111111001100110000001100000";
+        String msg = MorseCodeDecoder.decodeBits(bits);
+        System.out.println(msg);
+//        System.out.println(
+//                MorseCodeDecoder.decode(msg));
     }
     
 }
