@@ -102,6 +102,16 @@ public class MorseCodeDecoder {
     }
     
     /**
+     * Given a string of bits, which may or may not begin or end with '0's,
+     * return the English translation
+     * @param bits
+     * @return 
+     */
+    public static String decodeBits(String bits) {
+        return ".";
+    }
+    
+    /**
      * Given a letter in Morse Code, returns the English letter or number
      * which the code signifies.
      * 
@@ -113,7 +123,7 @@ public class MorseCodeDecoder {
     }
     
     /**
-     * Given a string in Morse Code, returns the English-letter equivalent.
+     * Given a string in Morse Code, returns the English translation.
      * 
      * @param morseCode
      * @return 
