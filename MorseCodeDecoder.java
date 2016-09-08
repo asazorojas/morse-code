@@ -84,7 +84,7 @@ public class MorseCodeDecoder {
      * @param bits
      * @return 
      */
-    public static String bitsToMorse(String bits) {
+    public static String decodeBits(String bits) {
         String morse = "";
         bits = bits.replaceAll("^[0]+", "");
         bits = bits.replaceAll("[0]+$", "");
@@ -99,33 +99,12 @@ public class MorseCodeDecoder {
     }
     
     /**
-     * Given a string of bits, which may or may not begin or end with '0's,
-     * return the English translation
-     * @param bits
-     * @return 
-     */
-    public static String decodeBits(String bits) {
-        return decode(bitsToMorse(bits));
-    }
-    
-    /**
-     * Given a letter in Morse Code, returns the English letter or number
-     * which the code signifies.
-     * 
-     * @param morseCode
-     * @return 
-     */
-    public static String decodeMorse(String morseCode) {
-        return MorseCode.get(morseCode);
-    }
-    
-    /**
      * Given a string in Morse Code, returns the English translation.
      * 
      * @param morseCode
      * @return 
      */
-    private static String decode(String morseCode) {
+    public static String decodeMorse(String morseCode) {
         String results = "";
         morseCode = morseCode.trim().replaceAll(" {3}", " SPACE ");
         // Here, we'd like to trim leading and trailing whitespace.
@@ -137,7 +116,7 @@ public class MorseCodeDecoder {
         while (sc.hasNext()) { 
           String nxt = sc.next();
           if (nxt.equals("SPACE")) results += " ";
-          else results += decodeMorse(nxt);
+          else results += MorseCode.get(nxt);
         }
         return results;
     }
@@ -147,7 +126,8 @@ public class MorseCodeDecoder {
     public static void main(String[] args) {
         String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
         String morse = MorseCodeDecoder.decodeBits(bits);
-        System.out.println(morse);
+        String msg = MorseCodeDecoder.decodeMorse(morse);
+        System.out.println(msg);
     }
     
 }
