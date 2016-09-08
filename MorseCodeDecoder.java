@@ -22,6 +22,15 @@
 import java.util.Scanner;
 
 public class MorseCodeDecoder {
+    
+    public static String decodeBits(String bits) {
+        return ".";
+    }
+    
+    public static String decodeMorse(String morseCode) {
+        return MorseCode.get(morseCode);
+    }
+    
     public static String decode(String morseCode) {
         String results = "";
         morseCode = morseCode.trim().replaceAll(" {3}", " SPACE ");
