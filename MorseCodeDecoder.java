@@ -137,7 +137,7 @@ public class MorseCodeDecoder {
         while (sc.hasNext()) { 
           String nxt = sc.next();
           if (nxt.equals("SPACE")) results += " ";
-          else results += MorseCode.get(nxt);
+          else results += decodeMorse(nxt);
         }
         return results;
     }
