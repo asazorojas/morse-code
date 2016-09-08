@@ -32,7 +32,7 @@ public class MorseCodeDecoder {
      * 
      * @param bits 
      */
-    private static void dotLength(String bits) {
+    private static void setTimeUnit(String bits) {
         String[] b = bits.split("1+");
         int l = b[1].length();
         for (int i = 2; i < b.length - 1; i++) {
@@ -88,7 +88,7 @@ public class MorseCodeDecoder {
         String morse = "";
         bits = bits.replaceAll("^[0]+", "");
         bits = bits.replaceAll("[0]+$", "");
-        dotLength(bits);
+        setTimeUnit(bits);
         String[] ones = bits.split("0+");
         String[] zeros = bits.split("1+");
         for (int i = 0; i < zeros.length - 1; i++) {
@@ -125,7 +125,7 @@ public class MorseCodeDecoder {
      */
     public static void main(String[] args) {
         String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
-//        MorseCodeDecoder.dotLength(bits);
+//        MorseCodeDecoder.setTimeUnit(bits);
         String morse = MorseCodeDecoder.decodeBits(bits);
         String msg = MorseCodeDecoder.decodeMorse(morse);
         System.out.println(msg);
