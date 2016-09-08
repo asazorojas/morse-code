@@ -26,9 +26,7 @@ public class MorseCodeDecoder {
     
     /**
      * Given a string of bits beginning and ending with '1's,
-     * stores in this.tu the "dot" length of the string, which forms
-     * the basis for the standard timing unit in a Morse Code
-     * transmission.
+     * returns the standard timing unit used in the bit transmission
      * 
      * @param bits 
      */
@@ -60,7 +58,7 @@ public class MorseCodeDecoder {
     /**
      * Given a string of ones and its following strings of zeros,
      * returns the Morse symbol (e.g. dot, dash, new-letter, new-word)
-     * these ones and zeros signify).
+     * which these ones and zeros signify).
      * 
      * @param one
      * @param zero
@@ -77,7 +75,7 @@ public class MorseCodeDecoder {
     
     /**
      * Given a string of ones, returns the Morse symbol
-     * (i.e. dot or dash) these ones signify.
+     * (i.e. dot or dash) which these ones signify.
      * 
      * @param one
      * @return 
