@@ -1,6 +1,3 @@
-
-import java.util.HashMap;
-
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
  *
