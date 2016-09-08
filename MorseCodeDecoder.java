@@ -36,12 +36,19 @@ public class MorseCodeDecoder {
         tu = l;
     }
     
-    private String nextTele(String one, String zero) {
+    private static String nextTele(String one, String zero) {
         String tele = "";
         if (one.length() == tu) tele += ".";
         else if (one.length() == 3 * tu) tele += "-";
         if (zero.length() == 3 * tu) tele += " ";
         else if (zero.length() == 7 * tu) tele += "   ";
+        return tele;
+    }
+    
+    private static String nextTele(String one) {
+        String tele = "";
+        if (one.length() == tu) tele += ".";
+        else if (one.length() == 3 * tu) tele += "-";
         return tele;
     }
     
@@ -55,12 +62,10 @@ public class MorseCodeDecoder {
         for (int i = 0; i < zeros.length - 1; i++) {
             System.out.print(ones[i]);
             System.out.println(zeros[i + 1]);
-            if (ones[i].length() == tu) morse += ".";
-            else if (ones[i].length() == 3 * tu) morse += "-";
-            if (zeros[i + 1].length() == 3 * tu) morse += " ";
-            else if (zeros[i + 1].length() == 7 * tu) morse += "   ";
+            morse += nextTele(ones[i], zeros[i + 1]);
         }
         System.out.println(ones[ones.length - 1]);
+        morse += nextTele(ones[ones.length - 1]);
         return morse;
     }
     
