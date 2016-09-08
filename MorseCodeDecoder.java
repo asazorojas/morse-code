@@ -39,6 +39,14 @@ public class MorseCodeDecoder {
     public static String decodeBits(String bits) {
         bits = bits.replaceAll("^[0]+", "");
         bits = bits.replaceAll("[0]+$", "");
+        int tu = dotLength(bits);
+        String[] ones = bits.split("0+");
+        String[] zeros = bits.split("1+");
+        for (int i = 0; i < zeros.length - 1; i++) {
+            System.out.print(ones[i]);
+            System.out.println(zeros[i + 1]);
+        }
+        System.out.println(ones[ones.length - 1]);
         return bits;
     }
     
@@ -68,8 +76,6 @@ public class MorseCodeDecoder {
     public static void main(String[] args) {
         String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
         String msg = MorseCodeDecoder.decodeBits(bits);
-        int l = MorseCodeDecoder.dotLength(bits);
-        System.out.println(l);
 //        System.out.println(
 //                MorseCodeDecoder.decode(msg));
     }
