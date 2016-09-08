@@ -22,8 +22,8 @@
 import java.util.Scanner;
 
 public class MorseCodeDecoder {
-    
-    private static int dotLength(String bits) {
+    private static int tu;
+    private static void dotLength(String bits) {
         String[] b = bits.split("0+");
         int l = b[0].length();
         for (int i = 1; i < b.length; i++) {
@@ -33,21 +33,35 @@ public class MorseCodeDecoder {
                 break;
             }
         }
-        return l;
+        tu = l;
+    }
+    
+    private String nextTele(String one, String zero) {
+        String tele = "";
+        if (one.length() == tu) tele += ".";
+        else if (one.length() == 3 * tu) tele += "-";
+        if (zero.length() == 3 * tu) tele += " ";
+        else if (zero.length() == 7 * tu) tele += "   ";
+        return tele;
     }
     
     public static String decodeBits(String bits) {
+        String morse = "";
         bits = bits.replaceAll("^[0]+", "");
         bits = bits.replaceAll("[0]+$", "");
-        int tu = dotLength(bits);
+        dotLength(bits);
         String[] ones = bits.split("0+");
         String[] zeros = bits.split("1+");
         for (int i = 0; i < zeros.length - 1; i++) {
             System.out.print(ones[i]);
             System.out.println(zeros[i + 1]);
+            if (ones[i].length() == tu) morse += ".";
+            else if (ones[i].length() == 3 * tu) morse += "-";
+            if (zeros[i + 1].length() == 3 * tu) morse += " ";
+            else if (zeros[i + 1].length() == 7 * tu) morse += "   ";
         }
         System.out.println(ones[ones.length - 1]);
-        return bits;
+        return morse;
     }
     
     public static String decodeMorse(String morseCode) {
@@ -75,7 +89,8 @@ public class MorseCodeDecoder {
      */
     public static void main(String[] args) {
         String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
-        String msg = MorseCodeDecoder.decodeBits(bits);
+        String morse = MorseCodeDecoder.decodeBits(bits);
+        System.out.println(morse);
 //        System.out.println(
 //                MorseCodeDecoder.decode(msg));
     }
