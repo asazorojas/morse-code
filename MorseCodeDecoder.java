@@ -33,9 +33,9 @@ public class MorseCodeDecoder {
      * @param bits 
      */
     private static void dotLength(String bits) {
-        String[] b = bits.split("0+");
-        int l = b[0].length();
-        for (int i = 1; i < b.length; i++) {
+        String[] b = bits.split("1+");
+        int l = b[1].length();
+        for (int i = 2; i < b.length - 1; i++) {
             int t = b[i].length();
             if (t != l) {
                 l = Math.min(l,t);
@@ -125,6 +125,7 @@ public class MorseCodeDecoder {
      */
     public static void main(String[] args) {
         String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
+//        MorseCodeDecoder.dotLength(bits);
         String morse = MorseCodeDecoder.decodeBits(bits);
         String msg = MorseCodeDecoder.decodeMorse(morse);
         System.out.println(msg);
