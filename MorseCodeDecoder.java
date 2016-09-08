@@ -38,12 +38,12 @@ public class MorseCodeDecoder {
         }
         return results;
     }
-}
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        System.out.println(
+                MorseCodeDecoder.decode(".... . -.--   .--- ..- -.. ."));
     }
     
 }
