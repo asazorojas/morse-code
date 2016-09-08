@@ -23,6 +23,19 @@ import java.util.Scanner;
 
 public class MorseCodeDecoder {
     
+    private static int dotLength(String bits) {
+        String[] b = bits.split("0+");
+        int l = b[0].length();
+        for (int i = 1; i < b.length; i++) {
+            int t = b[i].length();
+            if (t != l) {
+                l = Math.min(l,t);
+                break;
+            }
+        }
+        return l;
+    }
+    
     public static String decodeBits(String bits) {
         bits = bits.replaceAll("^[0]+", "");
         bits = bits.replaceAll("[0]+$", "");
@@ -53,9 +66,10 @@ public class MorseCodeDecoder {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String bits = "000000110011001100110000001100000011111100110011111100111111000000000000001100111111001111110011111100000011001100111111000000111111001100110000001100000";
+        String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
         String msg = MorseCodeDecoder.decodeBits(bits);
-        System.out.println(msg);
+        int l = MorseCodeDecoder.dotLength(bits);
+        System.out.println(l);
 //        System.out.println(
 //                MorseCodeDecoder.decode(msg));
     }
