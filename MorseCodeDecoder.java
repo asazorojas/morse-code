@@ -108,7 +108,7 @@ public class MorseCodeDecoder {
      * @return 
      */
     public static String decodeBits(String bits) {
-        return ".";
+        return decode(bitsToMorse(bits));
     }
     
     /**
@@ -149,7 +149,7 @@ public class MorseCodeDecoder {
      */
     public static void main(String[] args) {
         String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
-        String morse = MorseCodeDecoder.bitsToMorse(bits);
+        String morse = MorseCodeDecoder.decodeBits(bits);
         System.out.println(morse);
 //        System.out.println(
 //                MorseCodeDecoder.decode(msg));
