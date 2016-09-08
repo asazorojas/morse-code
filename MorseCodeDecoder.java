@@ -128,7 +128,7 @@ public class MorseCodeDecoder {
      * @param morseCode
      * @return 
      */
-    public static String decode(String morseCode) {
+    private static String decode(String morseCode) {
         String results = "";
         morseCode = morseCode.trim().replaceAll(" {3}", " SPACE ");
         // Here, we'd like to trim leading and trailing whitespace.
@@ -151,8 +151,6 @@ public class MorseCodeDecoder {
         String bits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011";
         String morse = MorseCodeDecoder.decodeBits(bits);
         System.out.println(morse);
-//        System.out.println(
-//                MorseCodeDecoder.decode(msg));
     }
     
 }
