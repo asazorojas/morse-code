@@ -23,6 +23,15 @@ import java.util.Scanner;
 
 public class MorseCodeDecoder {
     private static int tu;
+    
+    /**
+     * Given a string of bits beginning and ending with '1's,
+     * stores in this.tu the "dot" length of the string, which forms
+     * the basis for the standard timing unit in a Morse Code
+     * transmission.
+     * 
+     * @param bits 
+     */
     private static void dotLength(String bits) {
         String[] b = bits.split("0+");
         int l = b[0].length();
@@ -36,6 +45,15 @@ public class MorseCodeDecoder {
         tu = l;
     }
     
+    /**
+     * Given a string of ones and its following strings of zeros,
+     * returns the Morse symbol (e.g. dot, dash, new-letter, new-word)
+     * these ones and zeros signify).
+     * 
+     * @param one
+     * @param zero
+     * @return 
+     */
     private static String nextTele(String one, String zero) {
         String tele = "";
         if (one.length() == tu) tele += ".";
@@ -45,6 +63,13 @@ public class MorseCodeDecoder {
         return tele;
     }
     
+    /**
+     * Given a string of ones, returns the Morse symbol
+     * (i.e. dot or dash) these ones signify.
+     * 
+     * @param one
+     * @return 
+     */
     private static String nextTele(String one) {
         String tele = "";
         if (one.length() == tu) tele += ".";
@@ -52,6 +77,13 @@ public class MorseCodeDecoder {
         return tele;
     }
     
+    /**
+     * Given a string of bits, which may or may not begin or end with '0's,
+     * returns the Morse Code translation of this message.
+     * 
+     * @param bits
+     * @return 
+     */
     public static String decodeBits(String bits) {
         String morse = "";
         bits = bits.replaceAll("^[0]+", "");
@@ -69,10 +101,23 @@ public class MorseCodeDecoder {
         return morse;
     }
     
+    /**
+     * Given a letter in Morse Code, returns the English letter or number
+     * which the code signifies.
+     * 
+     * @param morseCode
+     * @return 
+     */
     public static String decodeMorse(String morseCode) {
         return MorseCode.get(morseCode);
     }
     
+    /**
+     * Given a string in Morse Code, returns the English-letter equivalent.
+     * 
+     * @param morseCode
+     * @return 
+     */
     public static String decode(String morseCode) {
         String results = "";
         morseCode = morseCode.trim().replaceAll(" {3}", " SPACE ");
