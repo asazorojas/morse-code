@@ -53,6 +53,7 @@ public class KMeans {
     private final Random rand;
     private final String[] bitCollection;
     private final int tu = -1;
+    private final HashMap<Integer, Integer> dist = new HashMap<>();
     
     public KMeans(String stream, int numClusters) {
         this.stream = stream;
@@ -86,15 +87,14 @@ public class KMeans {
     }
     
     public void setDistribution() {
-        HashMap<Integer, Integer> h = new HashMap<>();
         for (int i = 0; i < bitCollection.length; i++) {
             int l = bitCollection[i].length();
-            if (!h.containsKey(l)) {
-                h.put(l, 1);
+            if (!dist.containsKey(l)) {
+                dist.put(l, 1);
             }
-            else h.put(l, h.get(l) + 1);
+            else dist.put(l, dist.get(l) + 1);
         }
-        for (Entry<Integer, Integer> e: h.entrySet()) {
+        for (Entry<Integer, Integer> e: dist.entrySet()) {
             System.out.println("Length: " + e.getKey() + 
                     " occured " + e.getValue() + " times");
         }
@@ -103,9 +103,11 @@ public class KMeans {
     public void printBitCollection() {
         for (String s: bitCollection) System.out.println(s);
     }
+    
         
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 2);
+        km.setDistribution();
         Cluster c = new Cluster(2);
         c.printLocation();
         System.out.println(c.getDistance(3));
