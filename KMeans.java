@@ -94,7 +94,6 @@ public class KMeans {
         }
     }
     
-    private final String stream;
     private final Cluster[] clusters;
     private final int numClusters;
     private final String[] bitCollection;
@@ -104,7 +103,6 @@ public class KMeans {
     List<Integer> keys;
     
     public KMeans(String stream, int numClusters) {
-        this.stream = stream;
         this.numClusters = numClusters;
         this.clusters = new Cluster[this.numClusters];
         for (int i = 0; i < clusters.length; i++) {
