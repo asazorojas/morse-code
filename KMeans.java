@@ -94,10 +94,12 @@ public class KMeans {
             }
             else dist.put(l, dist.get(l) + 1);
         }
-        for (Entry<Integer, Integer> e: dist.entrySet()) {
+    }
+    
+    public void printDistribution() {
+        for (Entry<Integer, Integer> e: dist.entrySet())
             System.out.println("Length: " + e.getKey() + 
                     " occured " + e.getValue() + " times");
-        }
     }
     
     public void printBitCollection() {
@@ -108,6 +110,7 @@ public class KMeans {
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 2);
         km.setDistribution();
+        km.printDistribution();
         Cluster c = new Cluster(2);
         c.printLocation();
         System.out.println(c.getDistance(3));
