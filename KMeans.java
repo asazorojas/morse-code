@@ -165,18 +165,17 @@ public class KMeans {
     }
     
     public void printDistances() {
-        for (Entry<Integer, Integer> e: dist.entrySet())
-            System.out.println();
+        for (Cluster c: clusters) {
+            for (Integer i: keys) {
+                System.out.print("From cluster at " + c.getLocation());
+                System.out.print(" to point at " + i + " is: ");
+                System.out.println(c.getDistance(i));
+            }
+        }
     }
         
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
-        km.printClusters();
-        km.randomizeClusters();
-        km.printClusters();
-        km.randomizeClusters();
-        km.printClusters();
-        km.randomizeClusters();
-        km.printClusters();
+        km.printDistances();
     }
 }
