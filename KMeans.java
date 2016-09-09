@@ -23,14 +23,30 @@ import java.util.Random;
  * @author Michael <GrubenM@GMail.com>
  */
 public class KMeans {
-    private String stream;
-    private int clusters;
-    private Random rand = new Random();
+    private final String stream;
+    private final int clusters;
+    private final Random rand;
+    private final String[] bitCollection;
     
     public KMeans(String stream, int clusters) {
         this.stream = stream;
         this.clusters = clusters;
+        this.rand = new Random();
+        
+        stream = stream.replaceAll("^[0]+", "");
+        stream = stream.replaceAll("[0]+$", "");
+        String[] ones = stream.split("0+");
+        String[] zeros = stream.split("1+");
+        bitCollection = new String[ones.length + zeros.length - 1];
+        for (int i = 0; i < ones.length - 1; i++) {
+            bitCollection[2*i] = ones[i];
+            bitCollection[2*i+1] = zeros[i+1];
+        }
+        bitCollection[bitCollection.length - 1] = ones[ones.length - 1];
+        for (String s: bitCollection) System.out.println(s);
     }
-    
-    
+        
+    public static void main(String[] args) {
+        KMeans km = new KMeans("00011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000000", 2);
+    }
 }
