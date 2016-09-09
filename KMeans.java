@@ -35,15 +35,15 @@ public class KMeans {
      * in the KMeans algorithm.
      */
     private static class Cluster {
-        private int currentLocation;
-        private int previousLocation = -5000;
+        private float currentLocation;
+        private float previousLocation = -5000;
         private float centroid;
         private ArrayList<Integer> points = new ArrayList<>();
         
         /**
          * Constructors
          */
-        private Cluster(int loc) {
+        private Cluster(float loc) {
             currentLocation = loc;
         }
         
@@ -68,18 +68,20 @@ public class KMeans {
                 sum += p;
             }
             centroid = sum / points.size();
+            setLocation(centroid);
         }
         
         /**
          * Getters and Setters
          */
-        private int getLocation() { return currentLocation; }
-        private int getPreviousLocation() { return previousLocation; }
-        private int getDistance(int point) {
+        private float getCentroid() { return centroid; }
+        private float getLocation() { return currentLocation; }
+        private float getPreviousLocation() { return previousLocation; }
+        private float getDistance(int point) {
             return Math.abs(currentLocation - point);
         }
 
-        private void setLocation(int loc) {
+        private void setLocation(float loc) {
             previousLocation = currentLocation;
             currentLocation = loc;
         }
