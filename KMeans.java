@@ -1,3 +1,6 @@
+
+import java.util.Random;
+
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
  *
@@ -22,8 +25,12 @@
 public class KMeans {
     private String stream;
     private int clusters;
+    private Random rand = new Random();
+    
     public KMeans(String stream, int clusters) {
         this.stream = stream;
         this.clusters = clusters;
     }
+    
+    
 }
