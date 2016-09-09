@@ -1,5 +1,7 @@
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -33,9 +35,11 @@ public class KMeans {
     private static class Cluster {
         int currentLocation;
         int previousLocation;
+        
         private Cluster(int loc) {
             currentLocation = loc;
         }
+
         private void printLocation() { System.out.println(currentLocation); }
         private int getLocation() { return currentLocation; }
         private void setLocation(int loc) {
@@ -50,19 +54,22 @@ public class KMeans {
     
     private final String stream;
     private final Cluster[] clusters;
-    private final Random rand;
     private final String[] bitCollection;
     private final int tu = -1;
     private final HashMap<Integer, Integer> dist = new HashMap<>();
+    Random rand = new Random();
+    List<Integer> keys;
     
     public KMeans(String stream, int numClusters) {
         this.stream = stream;
         this.clusters = new Cluster[numClusters];
-        this.rand = new Random();
         
         stream = stream.replaceAll("^[0]+", ""); // remove leading 0s
         stream = stream.replaceAll("[0]+$", ""); // remove trailing 0s
         
+        /**
+         * The following if/else block populates this.bitCollection.
+         */
         if (stream.length() == 0) {
             bitCollection = new String[1];
             bitCollection[0] = "";
@@ -84,6 +91,10 @@ public class KMeans {
                 bitCollection[bitCollection.length - 1] = ones[ones.length - 1];
             }
         }
+        
+        /**
+         * The following for loop populates the this.dist HashMap.
+         */
         for (int i = 0; i < bitCollection.length; i++) {
             int l = bitCollection[i].length();
             if (!dist.containsKey(l)) {
@@ -91,8 +102,21 @@ public class KMeans {
             }
             else dist.put(l, dist.get(l) + 1);
         }
+        this.keys = new ArrayList<>(dist.keySet());
+        
+        /**
+         * The following for loop populates the clusters array.
+         */
+        for (int i = 0; i < clusters.length; i++) {
+            int key = keys.get(rand.nextInt(keys.size()));
+            clusters[i] = new Cluster(dist.get(key));
+        }
     }
     
+    public void printClusters() {
+        for (Cluster c: clusters)
+            System.out.println(c.getLocation());
+    }
     
     public void printDistribution() {
         for (Entry<Integer, Integer> e: dist.entrySet())
@@ -104,12 +128,14 @@ public class KMeans {
         for (String s: bitCollection) System.out.println(s);
     }
     
+    public void printDistances() {
+        for (Entry<Integer, Integer> e: dist.entrySet())
+            System.out.println();
+    }
         
     public static void main(String[] args) {
-        KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 2);
+        KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
         km.printDistribution();
-        Cluster c = new Cluster(2);
-        c.printLocation();
-        System.out.println(c.getDistance(3));
+        km.printClusters();
     }
 }
