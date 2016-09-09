@@ -67,8 +67,6 @@ public class KMeans {
         private void clearPoints() {
             previousPoints = (ArrayList<Integer>) currentPoints.clone();
             currentPoints.clear();
-            System.out.println(previousPoints);
-            System.out.println(currentPoints);
         }
         
         private void update() {
@@ -228,6 +226,11 @@ public class KMeans {
         for (Cluster c: clusters) c.clearPoints();
     }
     
+    public boolean didChange() {
+        for (Cluster c: clusters) if (c.didChange()) return true;
+        return false;
+    }
+    
     public void update() {
         for (Cluster c: clusters) c.update();
     }
@@ -248,6 +251,9 @@ public class KMeans {
             System.out.print(c.getLocation() +" ");
             System.out.println(c.getPreviousLocation());
         }
+    }
+    public void printDidChange() {
+        System.out.println(didChange());
     }
     public void printDistances() {
         for (Integer i: keys) {
@@ -277,26 +283,17 @@ public class KMeans {
     
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
-        Cluster c = new Cluster(0);
-        c.addPoint(1);
-        c.addPoint(5);
-        c.addPoint(9);
-        c.clearPoints();
-        c.addPoint(1);
-        c.addPoint(5);
-        c.addPoint(9);
-        c.addPoint(10);
-        System.out.println(c.didChange());
-        c.clearPoints();
-//        km.printDistribution();
-//        km.assignToClosestCluster();
-//        km.printClusterPoints();
-//        km.update();
-//        km.printClusterPoints();
-//        km.clear();
-//        km.assignToClosestCluster();
-//        km.update();
-//        km.printClusterPoints();
-//        km.clear();
+        km.printDistribution();
+        km.assignToClosestCluster();
+        km.printClusterPoints();
+        km.update();
+        km.printDidChange();
+        km.printClusterPoints();
+        km.clear();
+        km.assignToClosestCluster();
+        km.update();
+        km.printDidChange();
+        km.printClusterPoints();
+        km.clear();
     }
 }
