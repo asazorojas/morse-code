@@ -36,7 +36,7 @@ public class KMeans {
      */
     private static class Cluster {
         int currentLocation;
-        int previousLocation;
+        int previousLocation = -5000;
         
         private Cluster(int loc) {
             currentLocation = loc;
@@ -48,6 +48,7 @@ public class KMeans {
 
         private void printLocation() { System.out.println(currentLocation); }
         private int getLocation() { return currentLocation; }
+        private int getPreviousLocation() { return previousLocation; }
         private void setLocation(int loc) {
             previousLocation = currentLocation;
             currentLocation = loc;
@@ -116,10 +117,25 @@ public class KMeans {
          * The following for loop populates the clusters array.
          */
         
-        randomizeClusters(numClusters);
+        initializeClusters(numClusters);
     }
     
     private void randomizeClusters(int numClusters) {
+        Set<Integer> picked = new HashSet<>();
+        int j = 0;
+        while (picked.size() < numClusters) {
+            for (int i = 0; i < clusters.length; i++) {
+                int t = keys.get(rand.nextInt(keys.size()));
+                if (!picked.contains(t)) {
+                    picked.add(t);
+                    clusters[j].setLocation(t);
+                    j++;
+                    }
+                }
+            }
+        }
+    
+    private void initializeClusters(int numClusters) {
         Set<Integer> picked = new HashSet<>();
         int j = 0;
         while (picked.size() < numClusters) {
@@ -139,8 +155,10 @@ public class KMeans {
     }
     
     public void printClusters() {
-        for (Cluster c: clusters)
-            System.out.println(c.getLocation());
+        for (Cluster c: clusters) {
+            System.out.print(c.getLocation() +" ");
+            System.out.println(c.getPreviousLocation());
+        }
     }
     
     public void printDistribution() {
