@@ -239,6 +239,14 @@ public class KMeans {
         return false;
     }
     
+    public boolean stillMoving(float thresh) {
+        for (Cluster c: clusters) {
+            System.out.println("Cluster " + c.getLocation() + " moved " + c.moved());
+            if (c.moved() > thresh) return true;
+        }
+        return false;
+    }
+    
     public void update() {
         for (Cluster c: clusters) c.update();
     }
@@ -291,9 +299,10 @@ public class KMeans {
     
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
+        km.assignToClosestCluster();
         do {
-            km.assignToClosestCluster();
             km.update();
+            km.assignToClosestCluster();
         } while (km.didChange());
     }
 }
