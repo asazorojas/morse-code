@@ -25,15 +25,38 @@ import java.util.Random;
  * @author Michael <GrubenM@GMail.com>
  */
 public class KMeans {
+    
+    /**
+     * This class provides data structures and methods for numClusters
+ in the KMeans algorithm.
+     */
+    private static class Cluster {
+        int currentLocation;
+        int previousLocation;
+        private Cluster(int loc) {
+            currentLocation = loc;
+        }
+        private void printLocation() { System.out.println(currentLocation); }
+        private int getLocation() { return currentLocation; }
+        private void setLocation(int loc) {
+            previousLocation = currentLocation;
+            currentLocation = loc;
+        }
+        
+        private int getDistance(int point) {
+            return Math.abs(currentLocation - point);
+        }
+    }
+    
     private final String stream;
-    private final int clusters;
+    private final Cluster[] clusters;
     private final Random rand;
     private final String[] bitCollection;
     private final int tu = -1;
     
-    public KMeans(String stream, int clusters) {
+    public KMeans(String stream, int numClusters) {
         this.stream = stream;
-        this.clusters = clusters;
+        this.clusters = new Cluster[numClusters];
         this.rand = new Random();
         
         stream = stream.replaceAll("^[0]+", ""); // remove leading 0s
@@ -83,6 +106,8 @@ public class KMeans {
         
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 2);
-        km.setDistribution();
+        Cluster c = new Cluster(2);
+        c.printLocation();
+        System.out.println(c.getDistance(3));
     }
 }
