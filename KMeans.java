@@ -52,7 +52,7 @@ public class KMeans {
         }
         
         /**
-         * Methods for claiming points and calculating centroid
+         * Methods for claiming points and calculating centroid.
          */
         private void addPoint(int i) {
             points.add(i);
@@ -76,7 +76,7 @@ public class KMeans {
         }
         
         /**
-         * Getters and Setters
+         * Getters and Setters.
          */
         private float getCentroid() { return centroid; }
         private float getLocation() { return currentLocation; }
@@ -84,14 +84,13 @@ public class KMeans {
         private float getDistance(int point) {
             return Math.abs(currentLocation - point);
         }
-
         private void setLocation(float loc) {
             previousLocation = currentLocation;
             currentLocation = loc;
         }
         
         /**
-         * Printers
+         * Printers.
          */
         private void printCentroid() { System.out.println(centroid); }
         private void printLocation() { System.out.println(currentLocation); }
@@ -100,6 +99,9 @@ public class KMeans {
         }
     }
     
+    /**
+     * KMeans attributes.
+     */
     private final Cluster[] clusters;
     private final int numClusters;
     private final String[] bitCollection;
@@ -156,6 +158,28 @@ public class KMeans {
         initializeClusters();
     }
     
+    /**
+     * Populates this.clusters with this.numClusters Cluster objects,
+     * whose initial locations are randomly chosen from this.keys
+     * without replacement.
+     */
+    private void initializeClusters() {
+        Set<Integer> picked = new HashSet<>();
+        int j = 0;
+        while (picked.size() < numClusters) {
+            int t = keys.get(rand.nextInt(keys.size()));
+            if (!picked.contains(t)) {
+                picked.add(t);
+                clusters[j] = new Cluster(t);
+                j++;
+            }
+        }
+    }
+
+    /**
+     * Sets the location of each Cluster in this.clusters to
+     * a location randomly chosen from this.keys without replacement.
+     */
     private void randomizeClusters() {
         Set<Integer> picked = new HashSet<>();
         int j = 0;
@@ -169,40 +193,18 @@ public class KMeans {
         }
     }
     
-    private void initializeClusters() {
-        Set<Integer> picked = new HashSet<>();
-        int j = 0;
-        while (picked.size() < numClusters) {
-            int t = keys.get(rand.nextInt(keys.size()));
-            if (!picked.contains(t)) {
-                picked.add(t);
-                clusters[j] = new Cluster(t);
-                j++;
-                }
-            }
-        }
-    
-    public void printKeys() {
-        for (Integer i: keys) System.out.println(i);
+    /**
+     * Printers.
+     */
+    public void printBitCollection() {
+        for (String s: bitCollection) System.out.println(s);
     }
-    
     public void printClusters() {
         for (Cluster c: clusters) {
             System.out.print(c.getLocation() +" ");
             System.out.println(c.getPreviousLocation());
         }
     }
-    
-    public void printDistribution() {
-        for (Entry<Integer, Integer> e: dist.entrySet())
-            System.out.println("Length: " + e.getKey() + 
-                    " occured " + e.getValue() + " times");
-    }
-    
-    public void printBitCollection() {
-        for (String s: bitCollection) System.out.println(s);
-    }
-    
     public void printDistances() {
         for (Integer i: keys) {
             float best = -1;
@@ -220,13 +222,25 @@ public class KMeans {
             System.out.println("Closest to: " + best);
         }
     }
-        
+    public void printDistribution() {
+        for (Entry<Integer, Integer> e: dist.entrySet())
+            System.out.println("Length: " + e.getKey() + 
+                    " occured " + e.getValue() + " times");
+    }
+    public void printKeys() {
+        for (Integer i: keys) System.out.println(i);
+    }
+    
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
         Cluster c = new Cluster();
         c.addPoint(1);
         c.addPoint(2);
+        c.updateWithoutMoving();
+        c.printCentroid();
+        c.printLocation();
         c.update();
         c.printCentroid();
+        c.printLocation();
     }
 }
