@@ -205,12 +205,12 @@ public class KMeans {
     
     public void printDistances() {
         for (Integer i: keys) {
-            int best = -1;
-            int closest = Integer.MAX_VALUE;
+            float best = -1;
+            float closest = Float.MAX_VALUE;
             for (Cluster c: clusters) {
                 System.out.print("From cluster at " + c.getLocation());
                 System.out.print(" to point at " + i + " is: ");
-                int d = c.getDistance(i);
+                float d = c.getDistance(i);
                 System.out.println(d);
                 if (d < closest) {
                     closest = d;
