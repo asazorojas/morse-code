@@ -43,7 +43,6 @@ public class KMeans {
             bitCollection[2*i+1] = zeros[i+1];
         }
         bitCollection[bitCollection.length - 1] = ones[ones.length - 1];
-        for (String s: bitCollection) System.out.println(s);
     }
         
     public static void main(String[] args) {
