@@ -38,7 +38,8 @@ public class KMeans {
         private float currentLocation;
         private float previousLocation = -5000;
         private float centroid;
-        private ArrayList<Integer> points = new ArrayList<>();
+        private final ArrayList<Integer> currentPoints = new ArrayList<>();
+        private final ArrayList<Integer> previousPoints = new ArrayList<>();
         
         /**
          * Constructors
@@ -52,14 +53,14 @@ public class KMeans {
         }
         
         /**
-         * Methods for claiming points and calculating centroid.
+         * Methods for claiming currentPoints and calculating centroid.
          */
         private void addPoint(int i) {
-            points.add(i);
+            currentPoints.add(i);
         }
         
         private void clearPoints() {
-            points.clear();
+            currentPoints.clear();
         }
         
         private void update() {
@@ -69,10 +70,10 @@ public class KMeans {
         
         private void updateWithoutMoving() {
             float sum = 0;
-            for (Integer p: points) {
+            for (Integer p: currentPoints) {
                 sum += p;
             }
-            centroid = sum / points.size();
+            centroid = sum / currentPoints.size();
         }
         
         /**
@@ -98,8 +99,9 @@ public class KMeans {
             System.out.println(previousLocation);
         }
         private void printPoints() {
-            for (Integer p: points)
-                System.out.println(p);
+            for (Integer p: currentPoints)
+                System.out.print(p + " ");
+            System.out.println();
         }
     }
     
@@ -200,25 +202,22 @@ public class KMeans {
     public void assignToClosestCluster() {
         for (Integer i: keys) {
             Cluster bestCluster = new Cluster();
-            float bestLocation = -1;
             float closest = Float.MAX_VALUE;
             for (Cluster c: clusters) {
-                System.out.print("From cluster at " + c.getLocation());
-                System.out.print(" to point at " + i + " is: ");
                 float d = c.getDistance(i);
-                System.out.println(d);
                 if (d < closest) {
                     closest = d;
-                    bestLocation = c.getLocation();
                     bestCluster = c;
                 }
             }
-            System.out.println("Assigning to cluster: " + bestLocation);
             for(int j = 0; j < dist.get(i); j++) {
                 bestCluster.addPoint(i);
-                System.out.println("Added " + i);
             }
         }
+    }
+    
+    public void clear() {
+        for (Cluster c: clusters) c.clearPoints();
     }
     
     public void update() {
@@ -272,8 +271,13 @@ public class KMeans {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
         km.printDistribution();
         km.assignToClosestCluster();
-        km.update();
-        km.assignToClosestCluster();
         km.printClusterPoints();
+        km.update();
+        km.printClusterPoints();
+        km.clear();
+        km.assignToClosestCluster();
+        km.update();
+        km.printClusterPoints();
+        km.clear();
     }
 }
