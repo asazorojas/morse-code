@@ -61,6 +61,7 @@ public class KMeans {
     
     private final String stream;
     private final Cluster[] clusters;
+    private final int numClusters;
     private final String[] bitCollection;
     private final int tu = -1;
     private final HashMap<Integer, Integer> dist = new HashMap<>();
@@ -69,7 +70,8 @@ public class KMeans {
     
     public KMeans(String stream, int numClusters) {
         this.stream = stream;
-        this.clusters = new Cluster[numClusters];
+        this.numClusters = numClusters;
+        this.clusters = new Cluster[this.numClusters];
         for (int i = 0; i < clusters.length; i++) {
             clusters[i] = new Cluster(0);
         }
@@ -112,40 +114,31 @@ public class KMeans {
             else dist.put(l, dist.get(l) + 1);
         }
         this.keys = new ArrayList<>(dist.keySet());
-        
-        /**
-         * The following for loop populates the clusters array.
-         */
-        
-        initializeClusters(numClusters);
+        initializeClusters();
     }
     
-    private void randomizeClusters(int numClusters) {
+    private void randomizeClusters() {
         Set<Integer> picked = new HashSet<>();
         int j = 0;
         while (picked.size() < numClusters) {
-            for (int i = 0; i < clusters.length; i++) {
-                int t = keys.get(rand.nextInt(keys.size()));
-                if (!picked.contains(t)) {
-                    picked.add(t);
-                    clusters[j].setLocation(t);
-                    j++;
-                    }
-                }
+            int t = keys.get(rand.nextInt(keys.size()));
+            if (!picked.contains(t)) {
+                picked.add(t);
+                clusters[j].setLocation(t);
+                j++;
             }
         }
+    }
     
-    private void initializeClusters(int numClusters) {
+    private void initializeClusters() {
         Set<Integer> picked = new HashSet<>();
         int j = 0;
         while (picked.size() < numClusters) {
-            for (int i = 0; i < clusters.length; i++) {
-                int t = keys.get(rand.nextInt(keys.size()));
-                if (!picked.contains(t)) {
-                    picked.add(t);
-                    clusters[j] = new Cluster(t);
-                    j++;
-                    }
+            int t = keys.get(rand.nextInt(keys.size()));
+            if (!picked.contains(t)) {
+                picked.add(t);
+                clusters[j] = new Cluster(t);
+                j++;
                 }
             }
         }
@@ -178,8 +171,12 @@ public class KMeans {
         
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
-        km.printDistribution();
         km.printClusters();
-        km.printKeys();
+        km.randomizeClusters();
+        km.printClusters();
+        km.randomizeClusters();
+        km.printClusters();
+        km.randomizeClusters();
+        km.printClusters();
     }
 }
