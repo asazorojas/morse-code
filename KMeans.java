@@ -63,12 +63,16 @@ public class KMeans {
         }
         
         private void update() {
+            updateWithoutMoving();
+            setLocation(centroid);
+        }
+        
+        private void updateWithoutMoving() {
             float sum = 0;
             for (Integer p: points) {
                 sum += p;
             }
             centroid = sum / points.size();
-            setLocation(centroid);
         }
         
         /**
