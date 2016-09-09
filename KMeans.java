@@ -35,8 +35,10 @@ public class KMeans {
  in the KMeans algorithm.
      */
     private static class Cluster {
-        int currentLocation;
-        int previousLocation = -5000;
+        private int currentLocation;
+        private int previousLocation = -5000;
+        private float centroid;
+        private ArrayList<Integer> points = new ArrayList<>();
         
         private Cluster(int loc) {
             currentLocation = loc;
@@ -45,7 +47,24 @@ public class KMeans {
         private Cluster() {
             currentLocation = -1;
         }
-
+        
+        private void addPoint(int i) {
+            points.add(i);
+        }
+        
+        private void clearPoints() {
+            points.clear();
+        }
+        
+        private void update() {
+            float sum = 0;
+            for (Integer p: points) {
+                sum += p;
+            }
+            centroid = sum / points.size();
+        }
+        
+        private void printCentroid() { System.out.println(centroid); }
         private void printLocation() { System.out.println(currentLocation); }
         private int getLocation() { return currentLocation; }
         private int getPreviousLocation() { return previousLocation; }
@@ -184,6 +203,10 @@ public class KMeans {
         
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
-        km.printDistances();
+        Cluster c = new Cluster();
+        c.addPoint(1);
+        c.addPoint(2);
+        c.update();
+        c.printCentroid();
     }
 }
