@@ -62,7 +62,7 @@ public class KMeans {
         }
     }
     
-    public void setTimeUnit() {
+    public void setDistribution() {
         HashMap<Integer, Integer> h = new HashMap<>();
         for (int i = 0; i < bitCollection.length; i++) {
             int l = bitCollection[i].length();
@@ -83,6 +83,6 @@ public class KMeans {
         
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 2);
-        km.setTimeUnit();
+        km.setDistribution();
     }
 }
