@@ -165,8 +165,8 @@ public class KMeans {
     }
     
     public void printDistances() {
-        for (Cluster c: clusters) {
-            for (Integer i: keys) {
+        for (Integer i: keys) {
+            for (Cluster c: clusters) {
                 System.out.print("From cluster at " + c.getLocation());
                 System.out.print(" to point at " + i + " is: ");
                 System.out.println(c.getDistance(i));
