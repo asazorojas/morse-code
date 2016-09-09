@@ -1,9 +1,11 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
@@ -39,6 +41,10 @@ public class KMeans {
         private Cluster(int loc) {
             currentLocation = loc;
         }
+        
+        private Cluster() {
+            currentLocation = -1;
+        }
 
         private void printLocation() { System.out.println(currentLocation); }
         private int getLocation() { return currentLocation; }
@@ -63,7 +69,9 @@ public class KMeans {
     public KMeans(String stream, int numClusters) {
         this.stream = stream;
         this.clusters = new Cluster[numClusters];
-        
+        for (int i = 0; i < clusters.length; i++) {
+            clusters[i] = new Cluster(0);
+        }
         stream = stream.replaceAll("^[0]+", ""); // remove leading 0s
         stream = stream.replaceAll("[0]+$", ""); // remove trailing 0s
         
@@ -107,10 +115,27 @@ public class KMeans {
         /**
          * The following for loop populates the clusters array.
          */
-        for (int i = 0; i < clusters.length; i++) {
-            int key = keys.get(rand.nextInt(keys.size()));
-            clusters[i] = new Cluster(dist.get(key));
+        
+        randomizeClusters(numClusters);
+    }
+    
+    private void randomizeClusters(int numClusters) {
+        Set<Integer> picked = new HashSet<>();
+        int j = 0;
+        while (picked.size() < numClusters) {
+            for (int i = 0; i < clusters.length; i++) {
+                int t = keys.get(rand.nextInt(keys.size()));
+                if (!picked.contains(t)) {
+                    picked.add(t);
+                    clusters[j] = new Cluster(t);
+                    j++;
+                    }
+                }
+            }
         }
+    
+    public void printKeys() {
+        for (Integer i: keys) System.out.println(i);
     }
     
     public void printClusters() {
@@ -137,5 +162,6 @@ public class KMeans {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
         km.printDistribution();
         km.printClusters();
+        km.printKeys();
     }
 }
