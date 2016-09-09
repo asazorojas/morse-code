@@ -31,8 +31,8 @@ import java.util.Set;
 public class KMeans {
     
     /**
-     * This class provides data structures and methods for numClusters
- in the KMeans algorithm.
+     * This class provides data structures and methods for clusters
+     * in the KMeans algorithm.
      */
     private static class Cluster {
         private int currentLocation;
@@ -40,6 +40,9 @@ public class KMeans {
         private float centroid;
         private ArrayList<Integer> points = new ArrayList<>();
         
+        /**
+         * Constructors
+         */
         private Cluster(int loc) {
             currentLocation = loc;
         }
@@ -48,6 +51,9 @@ public class KMeans {
             currentLocation = -1;
         }
         
+        /**
+         * Methods for claiming points and calculating centroid
+         */
         private void addPoint(int i) {
             points.add(i);
         }
@@ -64,17 +70,27 @@ public class KMeans {
             centroid = sum / points.size();
         }
         
-        private void printCentroid() { System.out.println(centroid); }
-        private void printLocation() { System.out.println(currentLocation); }
+        /**
+         * Getters and Setters
+         */
         private int getLocation() { return currentLocation; }
         private int getPreviousLocation() { return previousLocation; }
+        private int getDistance(int point) {
+            return Math.abs(currentLocation - point);
+        }
+
         private void setLocation(int loc) {
             previousLocation = currentLocation;
             currentLocation = loc;
         }
         
-        private int getDistance(int point) {
-            return Math.abs(currentLocation - point);
+        /**
+         * Printers
+         */
+        private void printCentroid() { System.out.println(centroid); }
+        private void printLocation() { System.out.println(currentLocation); }
+        private void printPreviousLocation() {
+            System.out.println(previousLocation);
         }
     }
     
