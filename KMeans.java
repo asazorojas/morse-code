@@ -97,6 +97,10 @@ public class KMeans {
         private void printPreviousLocation() {
             System.out.println(previousLocation);
         }
+        private void printPoints() {
+            for (Integer p: points)
+                System.out.println(p);
+        }
     }
     
     /**
@@ -193,11 +197,44 @@ public class KMeans {
         }
     }
     
+    public void assignToClosestCluster() {
+        for (Integer i: keys) {
+            Cluster bestCluster = new Cluster();
+            float bestLocation = -1;
+            float closest = Float.MAX_VALUE;
+            for (Cluster c: clusters) {
+                System.out.print("From cluster at " + c.getLocation());
+                System.out.print(" to point at " + i + " is: ");
+                float d = c.getDistance(i);
+                System.out.println(d);
+                if (d < closest) {
+                    closest = d;
+                    bestLocation = c.getLocation();
+                    bestCluster = c;
+                }
+            }
+            System.out.println("Assigning to cluster: " + bestLocation);
+            for(int j = 0; j < dist.get(i); j++) {
+                bestCluster.addPoint(i);
+                System.out.println("Added " + i);
+            }
+        }
+    }
+    
+    public void update() {
+        for (Cluster c: clusters) c.update();
+    }
     /**
      * Printers.
      */
     public void printBitCollection() {
         for (String s: bitCollection) System.out.println(s);
+    }
+    public void printClusterPoints() {
+        for (Cluster c: clusters) {
+            System.out.println("Points for cluster at " + c.getLocation());
+            c.printPoints();
+        }
     }
     public void printClusters() {
         for (Cluster c: clusters) {
@@ -233,14 +270,10 @@ public class KMeans {
     
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
-        Cluster c = new Cluster();
-        c.addPoint(1);
-        c.addPoint(2);
-        c.updateWithoutMoving();
-        c.printCentroid();
-        c.printLocation();
-        c.update();
-        c.printCentroid();
-        c.printLocation();
+        km.printDistribution();
+        km.assignToClosestCluster();
+        km.update();
+        km.assignToClosestCluster();
+        km.printClusterPoints();
     }
 }
