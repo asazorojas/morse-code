@@ -37,7 +37,8 @@ public class KMeans {
     private static class Cluster {
         private float currentLocation;
         private float previousLocation = -5000;
-        private float centroid;
+        private float currentCentroid;
+        private float previousCentroid;
         private ArrayList<Integer> currentPoints = new ArrayList<>();
         private ArrayList<Integer> previousPoints = new ArrayList<>();
         
@@ -53,7 +54,7 @@ public class KMeans {
         }
         
         /**
-         * Methods for claiming currentPoints and calculating centroid.
+         * Methods for claiming currentPoints and calculating currentCentroid.
          */
         private void addPoint(int i) {
             currentPoints.add(i);
@@ -69,9 +70,13 @@ public class KMeans {
             currentPoints.clear();
         }
         
+        private float moved() {
+            return Math.abs(previousCentroid - currentCentroid);
+        }
+        
         private void update() {
             updateWithoutMoving();
-            setLocation(centroid);
+            setLocation(currentCentroid);
         }
         
         private void updateWithoutMoving() {
@@ -79,13 +84,14 @@ public class KMeans {
             for (Integer p: currentPoints) {
                 sum += p;
             }
-            centroid = sum / currentPoints.size();
+            previousCentroid = currentCentroid;
+            currentCentroid = sum / currentPoints.size();
         }
         
         /**
          * Getters and Setters.
          */
-        private float getCentroid() { return centroid; }
+        private float getCentroid() { return currentCentroid; }
         private float getLocation() { return currentLocation; }
         private float getPreviousLocation() { return previousLocation; }
         private float getDistance(int point) {
@@ -99,7 +105,7 @@ public class KMeans {
         /**
          * Printers.
          */
-        private void printCentroid() { System.out.println(centroid); }
+        private void printCentroid() { System.out.println(currentCentroid); }
         private void printLocation() { System.out.println(currentLocation); }
         private void printPreviousLocation() {
             System.out.println(previousLocation);
