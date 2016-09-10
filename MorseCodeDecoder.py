@@ -121,6 +121,19 @@ class KMeans(object):
                     self.bitCollection.append(zeros[i + 1])
                 self.bitCollection.append(ones[-1])
         
+        for bit in self.bitCollection:
+            l = len(bit)
+            if l not in self.bitCollection:
+                self.bitCollection[l] = 1
+            else:
+                self.bitCollection[l] += 1
+        this.keys = sorted(this.dist.keys())
+        self.initializeClusters()
+        
+    def initializeClusters(self):
+        self.clusters.append(Cluster(this.keys[0]))
+        self.clusters.append(Cluster((this.keys[0] + this.keys[-1]) / 2 + 1))
+        self.clusters.append(Cluster(this.keys[-1]))
     
 def decodeBitsAdvanced(bits):
     '''
