@@ -253,8 +253,8 @@ def decodeBitsAdvanced(fuzzyBits):
     fuzzyBits = fuzzyBits.strip("0")
     km = KMeans(fuzzyBits, 3)
     km.converge()
-    thresh13 = 1.2 * (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2
-    thresh37 = 1.1 * (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2
+    thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2
+    thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2
     ones = re.split("0+", fuzzyBits)
     zeros = re.split("1+", fuzzyBits)
     for i in range(len(zeros) - 1):
