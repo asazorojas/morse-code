@@ -178,10 +178,22 @@ public class KMeans {
     
     /**
      * Populates this.clusters with this.numClusters Cluster objects,
+     * whose initial locations are from this.keys (the minimum, the
+     * maximum, and the middle between the two).
+     */
+    private void initializeClusters() {
+        clusters[0] = new Cluster(keys.get(0));
+        clusters[1] = new Cluster(keys.get(keys.size() - 1));
+        clusters[2] = new Cluster(
+            (keys.get(keys.size() - 1) - keys.get(0)) / 2 + 1);
+    }
+    
+    /**
+     * Populates this.clusters with this.numClusters Cluster objects,
      * whose initial locations are randomly chosen from this.keys
      * without replacement.
      */
-    private void initializeClusters() {
+    private void initializeClustersRandomly() {
         Set<Integer> picked = new HashSet<>();
         int j = 0;
         while (picked.size() < numClusters) {
