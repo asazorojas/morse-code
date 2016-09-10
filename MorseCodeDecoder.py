@@ -62,7 +62,7 @@ class Cluster(object):
     
     def clearPoints(self):
         self.previousPoints = self.currentPoints[:]
-        self.currentPoints.clear()
+        del self.currentPoints[:]
         
     def update(self):
         s = 0.0
