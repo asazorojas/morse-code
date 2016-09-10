@@ -131,7 +131,7 @@ public class KMeans {
     private final Cluster[] clusters;
     private final int numClusters;
     private final String[] bitCollection;
-    private int tu = 0;
+    private float tu = 0;
     private final HashMap<Integer, Integer> dist = new HashMap<>();
     Random rand = new Random();
     List<Integer> keys;
@@ -279,10 +279,10 @@ public class KMeans {
     public float getTimeUnit() {
         Cluster[] sortedClusters = clusters.clone();
         Arrays.sort(sortedClusters);
-        for (Cluster c: sortedClusters) c.printLocation();
-        tu += clusters[0].getLocation();
-        tu += clusters[1].getLocation() / 3;
-        tu += clusters[2].getLocation() / 7;
+        for (Cluster c: sortedClusters) System.out.print(c.getLocation() + " ");
+        tu += sortedClusters[0].getLocation();
+        tu += sortedClusters[1].getLocation() / 3;
+        tu += sortedClusters[2].getLocation() / 7;
         return tu / 3;
     }
     /**
