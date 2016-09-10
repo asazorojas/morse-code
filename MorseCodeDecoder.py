@@ -38,12 +38,15 @@ MORSE_CODE = {
     "...---...": "SOS"
 }
 
+heyJude = ".... . -.--   .--- ..- -.. ."
+
 class Cluster(object):
     
 
 
 def decodeBitsAdvanced(bits):
     '''
+    input bits, a string of 0s and 1s with variable length
     returns string, a morse code message
     '''
     
@@ -52,7 +55,15 @@ def decodeBitsAdvanced(bits):
 
 def decodeMorse(morseCode):
     '''
+    input morseCode, a string of dots, dashes, and spaces
     returns string, a human-readable message
     '''
-    # ToDo: Accept dots, dashes and spaces, return human-readable message
-    return morseCode.replace('.', 'E').replace('-', 'T').replace(' ', '')
+    result = ""
+    morseCode = morseCode.replace("   ", " SPACE ")
+    morses = morseCode.split()
+    for morse in morses:
+        if morse == "SPACE":
+            result += " "
+        else:
+            result += MORSE_CODE[morse]
+    return result
