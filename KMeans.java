@@ -115,8 +115,8 @@ public class KMeans {
      * KMeans attributes.
      */
     private final Cluster[] clusters;
-    private final String[] bitCollection;
-    private float[] tu = {0, 0, 0};
+    private final String[] bitCollection; // for generating frequency dist.
+    private float[] timeUnits = {0, 0, 0};
     private final HashMap<Integer, Integer> dist = new HashMap<>();
     Random rand = new Random();
     List<Integer> keys;
@@ -240,22 +240,28 @@ public class KMeans {
     }
     
     /**
-     * Populates this.tu[] with the first, second, and third cluster
+     * Populates this.timeUnits[] with the first, second, and third cluster
      * means, representing the average length of 1 time unit,
      * 3 time units, and 7 time units respectively.
      */
     public void calculateTimeUnits() {
         Cluster[] sortedClusters = clusters.clone();
         Arrays.sort(sortedClusters);
-        tu[0] = sortedClusters[0].getLocation();
-        tu[1] = sortedClusters[1].getLocation();
-        tu[2] = sortedClusters[2].getLocation();
+        timeUnits[0] = sortedClusters[0].getLocation();
+        timeUnits[1] = sortedClusters[1].getLocation();
+        timeUnits[2] = sortedClusters[2].getLocation();
     }
     
     public void clear() {
         for (Cluster c: clusters) c.clearPoints();
     }
     
+    /**
+     * Assigns the closest Cluster to each point, calculates the centroid
+     * for those Clusters based off of those points, moves the Clusters
+     * to their respective centroids, and repeats until assignment on the next
+     * iteration is the same.
+     */
     public void converge() {
         assignToClosestCluster();
         do {
@@ -279,7 +285,8 @@ public class KMeans {
      *
      */
     public Cluster[] getClusters() { return this.clusters; }
-    public float getTimeUnit(int index) { return this.tu[index]; }
+    public float getTimeUnit(int index) { return this.timeUnits[index]; }
+    
     /**
      * Printers.
      */
