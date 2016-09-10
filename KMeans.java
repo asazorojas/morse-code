@@ -174,7 +174,7 @@ public class KMeans {
         clusters[0] = new Cluster(keys.get(0));
         clusters[2] = new Cluster(keys.get(keys.size() - 1));
         clusters[1] = new Cluster(
-            (keys.get(keys.size() - 1) - keys.get(0)) / 2 + 1);
+            (keys.get(keys.size() - 1) + keys.get(0)) / 2 + 1);
     }
     
     /**
