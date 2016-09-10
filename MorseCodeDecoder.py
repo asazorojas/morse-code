@@ -43,8 +43,40 @@ MORSE_CODE = {
 heyJude = ".... . -.--   .--- ..- -.. ."
 JudeBits = "00011001100110011000000110000001111110011001111110011111100000000000000110011111100111111001111110000001100110011111100000011111100110011000000110000"
 
-# class Cluster(object):
+class Cluster(object):
+    location = None
+    centroid = None
+    currentPoints = []
+    previousPoints = []
     
+    def __init__(self, loc):
+        self.location = loc
+    
+    def addPoint(self, point):
+        self.currentPoints.append(point)
+        
+    def didChange(self):
+        if len(self.currentPoints) != len(self.previousPoints):
+            return True
+        else:
+            return !self.currentPoints == self.previousPoints
+    
+    def clearPoints(self):
+        self.previousPoints = self.currentPoints[:]
+        self.currentPoints.clear()
+        
+    def update(self):
+        sum = 0.0
+        for p in self.currentPoints:
+            sum += p
+        self.centroid = sum / len(self.currentPoints)
+        self.location = self.centroid
+    
+    def getLocation(self):
+        return self.location
+        
+    def getDistance(self, point):
+        return abs(self.location - point)
 
 
 def decodeBitsAdvanced(bits):
