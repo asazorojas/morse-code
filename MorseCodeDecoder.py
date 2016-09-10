@@ -42,6 +42,7 @@ MORSE_CODE = {
 
 heyJude = ".... . -.--   .--- ..- -.. ."
 JudeBits = "00011001100110011000000110000001111110011001111110011111100000000000000110011111100111111001111110000001100110011111100000011111100110011000000110000"
+fuzzyBits = "0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000"
 
 class Cluster(object):
     location = None
@@ -95,9 +96,32 @@ class Cluster(object):
         for point in self.previousPoints:
             result += str(point) + " "
         print(result[:-1])
-            
+        
 
-
+class KMeans(object):
+    clusters = []
+    bitCollection = []
+    timeUnits = [0,0,0]
+    dist = {}
+    keys = []
+    
+    def __init__(self, stream, numClusters):
+        stream = stream.strip("0")
+        
+        if len(stream) == 0:
+            self.bitCollection.append("")
+        else:
+            ones = re.split("0+", stream)
+            zeros = re.split("1+", stream)
+            if len(zeros) == 0:
+                self.bitCollection.append(ones[0])
+            else:
+                for i in range(len(ones) - 1):
+                    self.bitCollection.append(ones[i])
+                    self.bitCollection.append(zeros[i + 1])
+                self.bitCollection.append(ones[-1])
+        
+    
 def decodeBitsAdvanced(bits):
     '''
     input bits, a string of 0s and 1s with variable timing
