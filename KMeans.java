@@ -323,7 +323,7 @@ public class KMeans {
     public void printDistribution() {
         for (Entry<Integer, Integer> e: dist.entrySet())
             System.out.println("Length: " + e.getKey() + 
-                    " occured " + e.getValue() + " times");
+                    " occurred " + e.getValue() + " times");
     }
     public void printKeys() {
         for (Integer i: keys) System.out.println(i);
