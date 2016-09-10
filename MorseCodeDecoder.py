@@ -131,9 +131,9 @@ class KMeans(object):
         self.initializeClusters()
         
     def initializeClusters(self):
-        self.clusters.append(Cluster(this.keys[0]))
-        self.clusters.append(Cluster((this.keys[0] + this.keys[-1]) / 2 + 1))
-        self.clusters.append(Cluster(this.keys[-1]))
+        self.clusters.append(Cluster(float(this.keys[0])))
+        self.clusters.append(Cluster((float(this.keys[0]) + float(this.keys[-1])) / 2 + 1))
+        self.clusters.append(Cluster(float(this.keys[-1])))
     
 def decodeBitsAdvanced(bits):
     '''
