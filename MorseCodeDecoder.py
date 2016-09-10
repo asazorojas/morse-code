@@ -43,7 +43,7 @@ MORSE_CODE = {
 heyJude = ".... . -.--   .--- ..- -.. ."
 JudeBits = "1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011"
 
-class Cluster(object):
+# class Cluster(object):
     
 
 
@@ -52,7 +52,6 @@ def decodeBitsAdvanced(bits):
     input bits, a string of 0s and 1s with variable timing
     returns string, a morse code message
     '''
-    
     # ToDo: Accept 0's and 1's, return dots, dashes and spaces
     return bits.replace('111', '-').replace('000', ' ').replace('1', '.').replace('0', '')
 
@@ -82,12 +81,37 @@ def getTimeUnit(bits):
     return min(os, zs)
 
 
+def nextTelePair(one, zero, tu):
+    tele = nextTeleSingle(one, tu)
+    if len(zero) == 3 * tu:
+        tele += " "
+    elif len(zero) == 7 * tu:
+        tele += "   "
+    return tele
+    
+        
+def nextTeleSingle(one, tu):
+    tele = ""
+    if len(one) == tu:
+        tele += "."
+    elif len(one) == 3 * tu:
+        tele += "-"
+    return tele
+
+
 def decodeBits(bits):
     '''
     input bits, a string of 0s and 1s with fixed timing
     returns string, a morse code message
     '''
+    morse = ""
     bits = bits.strip("0")
+    tu = getTimeUnit(bits)
+    ones = re.split("0+", bits)
+    zeros = re.split("1+",bits)
+    for i in range(len(zeros) - 1):
+        morse += nextTelePair(ones[i], zeros[i + 1], tu)
+    return morse
     
 
 def decodeMorse(morseCode):
@@ -104,3 +128,7 @@ def decodeMorse(morseCode):
         else:
             result += MORSE_CODE[morse]
     return result
+
+
+print(decodeBits(JudeBits))
+print(decodeMorse(decodeBits(JudeBits)))
