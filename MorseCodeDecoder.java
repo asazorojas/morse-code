@@ -93,6 +93,8 @@ public class MorseCodeDecoder {
      * Given a string of ones and its following strings of zeros,
      * returns the Morse symbol (e.g. dot, dash, new-letter, new-word)
      * which these ones and zeros signify).
+     * This method works even when there is some variation in the length
+     * of the time unit used.
      * 
      * @param one
      * @param zero
@@ -111,6 +113,8 @@ public class MorseCodeDecoder {
     /**
      * Given a string of ones, returns the Morse symbol
      * (i.e. dot or dash) which these ones signify.
+     * This method works even when there is some variation in the length
+     * of the time unit used.
      * 
      * @param one
      * @return 
