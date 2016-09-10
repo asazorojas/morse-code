@@ -123,17 +123,41 @@ class KMeans(object):
         
         for bit in self.bitCollection:
             l = len(bit)
-            if l not in self.bitCollection:
-                self.bitCollection[l] = 1
+            if l in self.dist:
+                self.dist[l] += 1
             else:
-                self.bitCollection[l] += 1
-        this.keys = sorted(this.dist.keys())
+                self.dist[l] = 1
+        self.keys = sorted(self.dist.keys())
         self.initializeClusters()
         
     def initializeClusters(self):
-        self.clusters.append(Cluster(float(this.keys[0])))
-        self.clusters.append(Cluster((float(this.keys[0]) + float(this.keys[-1])) / 2 + 1))
-        self.clusters.append(Cluster(float(this.keys[-1])))
+        self.clusters.append(Cluster(float(self.keys[0])))
+        self.clusters.append(Cluster((float(self.keys[0]) + float(self.keys[-1])) / 2 + 1))
+        self.clusters.append(Cluster(float(self.keys[-1])))
+        
+    def assignToClosestCluster(self):
+        self.clear()
+        for key in self.keys:
+            bestCluster = Cluster(-5000)
+            closest = 10000000.0
+            for c in self.clusters:
+                d = c.getDistance(key)
+                if d < closest:
+                    closest = d
+                    bestCluster = c
+            for i in range(self.dist[key]):
+                bestCluster.addPoint(key)
+                
+    def calculateTimeUnits(self):
+        sortedClusters = sorted(self.clusters, key = lambda x: x.getLocation(), reverse = False)
+        for i in range(3):
+            self.timeUnits[i] = sortedClusters[i].getLocation()
+            
+    def clear(self):
+        for c in self.clusters:
+            c.clearPoints()
+        
+        
     
 def decodeBitsAdvanced(bits):
     '''
