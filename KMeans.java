@@ -37,9 +37,7 @@ public class KMeans {
      */
     private static class Cluster implements Comparable<Cluster> {
         private float currentLocation;
-        private float previousLocation = -5000;
         private float currentCentroid;
-        private float previousCentroid;
         private ArrayList<Integer> currentPoints = new ArrayList<>();
         private ArrayList<Integer> previousPoints = new ArrayList<>();
         
@@ -70,47 +68,30 @@ public class KMeans {
             previousPoints = (ArrayList<Integer>) currentPoints.clone();
             currentPoints.clear();
         }
-        
-        private float moved() {
-            return Math.abs(previousCentroid - currentCentroid);
-        }
-        
+                
         private void update() {
-            updateWithoutMoving();
-            setLocation(currentCentroid);
-        }
-        
-        private void updateWithoutMoving() {
             float sum = 0;
             for (Integer p: currentPoints) {
                 sum += p;
             }
-            previousCentroid = currentCentroid;
             currentCentroid = sum / currentPoints.size();
+            setLocation(currentCentroid);
         }
-        
+                
         /**
          * Getters and Setters.
          */
-        private float getCentroid() { return currentCentroid; }
         private float getLocation() { return currentLocation; }
-        private float getPreviousLocation() { return previousLocation; }
         private float getDistance(int point) {
             return Math.abs(currentLocation - point);
         }
-        private void setLocation(float loc) {
-            previousLocation = currentLocation;
-            currentLocation = loc;
-        }
+        private void setLocation(float loc) { currentLocation = loc; }
         
         /**
          * Printers.
          */
         private void printCentroid() { System.out.println(currentCentroid); }
         private void printLocation() { System.out.println(currentLocation); }
-        private void printPreviousLocation() {
-            System.out.println(previousLocation);
-        }
         private void printPoints() {
             for (Integer p: currentPoints)
                 System.out.print(p + " ");
@@ -275,15 +256,7 @@ public class KMeans {
         for (Cluster c: clusters) if (c.didChange()) return true;
         return false;
     }
-    
-    public boolean stillMoving(float thresh) {
-        for (Cluster c: clusters) {
-            System.out.println("Cluster " + c.getLocation() + " moved " + c.moved());
-            if (c.moved() > thresh) return true;
-        }
-        return false;
-    }
-    
+        
     public void update() {
         for (Cluster c: clusters) c.update();
     }
@@ -308,8 +281,7 @@ public class KMeans {
     }
     public void printClusters() {
         for (Cluster c: clusters) {
-            System.out.print(c.getLocation() +" ");
-            System.out.println(c.getPreviousLocation());
+            System.out.println(c.getLocation());
         }
     }
     public void printDidChange() {
