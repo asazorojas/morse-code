@@ -68,7 +68,12 @@ public class KMeans {
             previousPoints = (ArrayList<Integer>) currentPoints.clone();
             currentPoints.clear();
         }
-                
+        
+        /**
+         * After new points have been assigned to this cluster, this method
+         * calculates the new centroid of the cluster and moves the cluster
+         * to that location.
+         */
         private void update() {
             float sum = 0;
             for (Integer p: currentPoints) {
@@ -110,7 +115,6 @@ public class KMeans {
      * KMeans attributes.
      */
     private final Cluster[] clusters;
-    private final int numClusters;
     private final String[] bitCollection;
     private float[] tu = {0, 0, 0};
     private final HashMap<Integer, Integer> dist = new HashMap<>();
@@ -118,8 +122,7 @@ public class KMeans {
     List<Integer> keys;
     
     public KMeans(String stream, int numClusters) {
-        this.numClusters = numClusters;
-        this.clusters = new Cluster[this.numClusters];
+        this.clusters = new Cluster[numClusters];
         for (int i = 0; i < clusters.length; i++) {
             clusters[i] = new Cluster(0);
         }
@@ -185,7 +188,7 @@ public class KMeans {
     private void initializeClustersRandomly() {
         Set<Integer> picked = new HashSet<>();
         int j = 0;
-        while (picked.size() < numClusters) {
+        while (picked.size() < clusters.length) {
             int t = keys.get(rand.nextInt(keys.size()));
             if (!picked.contains(t)) {
                 picked.add(t);
@@ -202,7 +205,7 @@ public class KMeans {
     private void randomizeClusters() {
         Set<Integer> picked = new HashSet<>();
         int j = 0;
-        while (picked.size() < numClusters) {
+        while (picked.size() < clusters.length) {
             int t = keys.get(rand.nextInt(keys.size()));
             if (!picked.contains(t)) {
                 picked.add(t);
@@ -212,6 +215,11 @@ public class KMeans {
         }
     }
     
+    /**
+     * Assigns cluster-labels to each length-point from the fuzzy input,
+     * which is subsequently used by the clusters to re-calculate their
+     * centroids and move accordingly.
+     */
     public void assignToClosestCluster() {
         this.printClusterPoints();
         clear();
@@ -231,6 +239,11 @@ public class KMeans {
         }
     }
     
+    /**
+     * Populates this.tu[] with the first, second, and third cluster
+     * means, representing the average length of 1 time unit,
+     * 3 time units, and 7 time units respectively.
+     */
     public void calculateTimeUnits() {
         Cluster[] sortedClusters = clusters.clone();
         Arrays.sort(sortedClusters);
