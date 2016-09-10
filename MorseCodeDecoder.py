@@ -244,7 +244,7 @@ class KMeans(object):
         plt.show()
         
         
-    
+# Required as per problem API
 def decodeBitsAdvanced(fuzzyBits):
     '''
     input bits, a string of 0s and 1s with variable timing
@@ -262,21 +262,77 @@ def decodeBitsAdvanced(fuzzyBits):
         morse += nextTelePairFuzzy(ones[i], zeros[i + 1], thresh13, thresh37)
     return morse
 
-def bruteThreshholds(fuzzyBits):
-    fuzzyBits = fuzzyBits.strip("0")
-    f = open('BruteForceDump', 'w')
-    ones = re.split("0+", fuzzyBits)
-    zeros = re.split("1+", fuzzyBits)
-    for lower in range(1, 20, 1):
-        for upper in range(lower + 1, 50, 1):
-            morse = ""
-            for i in range(len(zeros) - 1):
-                morse += nextTelePairFuzzy(ones[i], zeros[i + 1], lower/10. + 7, upper/10. + 14)
-            f.write(str(lower/10. + 7) + " " + str(upper/10. + 14) + '\n')
-            f.write(decodeMorse(morse))
-            f.write('\n\n')
-                
+# Required as per problem API
+def decodeBits(bits):
+    '''
+    input bits, a string of 0s and 1s with fixed timing
+    returns string, a morse code message
+    '''
+    morse = ""
+    bits = bits.strip("0")
+    tu = getTimeUnit(bits)
+    ones = re.split("0+", bits)
+    zeros = re.split("1+",bits)
+    for i in range(len(zeros) - 1):
+        morse += nextTelePair(ones[i], zeros[i + 1], tu)
+    return morse
+    
+# Required as per problem API
+def decodeMorse(morseCode):
+    '''
+    input morseCode, a string of dots, dashes, and spaces
+    returns string, a human-readable message
+    '''
+    result = ""
+    morseCode = morseCode.replace("   ", " SPACE ")
+    morses = morseCode.split()
+    for morse in morses:
+        if morse == "SPACE":
+            result += " "
+        else:
+            try:
+                result += MORSE_CODE[morse]
+            except KeyError:
+                result += "(KEYERR: "+morse+")"
+    return result                
 
+# Helper function for 3 of 3 in the series
+def nextTelePairFuzzy(one, zero, thresh13, thresh37):
+    tele = nextTeleSingleFuzzy(one, thresh13)
+    if len(zero) >= thresh13 and len(zero) < thresh37:
+        tele += " "
+    elif len(zero) >= thresh37:
+        tele += "   "
+    return tele
+
+# Helper function for 3 of 3 in the series
+def nextTeleSingleFuzzy(one, thresh13):
+    tele = ""
+    if len(one) <= thresh13:
+        tele += "."
+    else:
+        tele += "-"
+    return tele
+
+# Helper function for 2 of 3 in the series
+def nextTelePair(one, zero, tu):
+    tele = nextTeleSingle(one, tu)
+    if len(zero) == 3 * tu:
+        tele += " "
+    elif len(zero) == 7 * tu:
+        tele += "   "
+    return tele
+    
+# Helper function for 2 of 3 in the series
+def nextTeleSingle(one, tu):
+    tele = ""
+    if len(one) == tu:
+        tele += "."
+    elif len(one) == 3 * tu:
+        tele += "-"
+    return tele    
+
+# Helper function for 2 of 3 in the series
 def getTimeUnit(bits):
     '''
     input bits, a string of 0s and 1s with fixed timing
@@ -302,72 +358,26 @@ def getTimeUnit(bits):
             break
     return min(os, zs)
 
+# Function to rapidly iterate through possible thresholds;
+# not a valid way of solving 3 of 3.
+def bruteThreshholds(fuzzyBits):
+    fuzzyBits = fuzzyBits.strip("0")
+    f = open('BruteForceDump', 'w')
+    ones = re.split("0+", fuzzyBits)
+    zeros = re.split("1+", fuzzyBits)
+    lowerStart = 7
+    lowerStop = 8       # exclusive
+    lowerStep = 0.25
+    upperStart = 15
+    upperStop = 16      # exclusive
+    upperStep = 0.25
+    for lower in range(0, int((lowerStop - lowerStart) / lowerStep), 1):
+        for upper in range(0, int((upperStop - upperStart) / upperStep), 1):
+            morse = ""
+            for i in range(len(zeros) - 1):
+                morse += nextTelePairFuzzy(ones[i], zeros[i + 1],
+                    lowerStart + lower * lowerStep, upperStart + upper * upperStep)
+            f.write(str(lowerStart + lower * lowerStep) + " " + str(upperStart + upper * upperStep) + '\n')
+            f.write(decodeMorse(morse))
+            f.write('\n\n')
 
-def nextTelePairFuzzy(one, zero, thresh13, thresh37):
-    tele = nextTeleSingleFuzzy(one, thresh13)
-    if len(zero) >= thresh13 and len(zero) < thresh37:
-        tele += " "
-    elif len(zero) >= thresh37:
-        tele += "   "
-    return tele
-    
-def nextTeleSingleFuzzy(one, thresh13):
-    tele = ""
-    if len(one) <= thresh13:
-        tele += "."
-    else:
-        tele += "-"
-    return tele
-
-
-def nextTelePair(one, zero, tu):
-    tele = nextTeleSingle(one, tu)
-    if len(zero) == 3 * tu:
-        tele += " "
-    elif len(zero) == 7 * tu:
-        tele += "   "
-    return tele
-    
-        
-def nextTeleSingle(one, tu):
-    tele = ""
-    if len(one) == tu:
-        tele += "."
-    elif len(one) == 3 * tu:
-        tele += "-"
-    return tele
-
-
-def decodeBits(bits):
-    '''
-    input bits, a string of 0s and 1s with fixed timing
-    returns string, a morse code message
-    '''
-    morse = ""
-    bits = bits.strip("0")
-    tu = getTimeUnit(bits)
-    ones = re.split("0+", bits)
-    zeros = re.split("1+",bits)
-    for i in range(len(zeros) - 1):
-        morse += nextTelePair(ones[i], zeros[i + 1], tu)
-    return morse
-    
-
-def decodeMorse(morseCode):
-    '''
-    input morseCode, a string of dots, dashes, and spaces
-    returns string, a human-readable message
-    '''
-    result = ""
-    morseCode = morseCode.replace("   ", " SPACE ")
-    morses = morseCode.split()
-    for morse in morses:
-        if morse == "SPACE":
-            result += " "
-        else:
-            try:
-                result += MORSE_CODE[morse]
-            except KeyError:
-                result += "(KEYERR: "+morse+")"
-    return result
-    
