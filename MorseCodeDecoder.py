@@ -179,6 +179,43 @@ class KMeans(object):
     def getTimeUnit(self, index):
         return this.timeUnits[index]
         
+    def printBitCollection(self):
+        for bit in self.bitCollection:
+            print(bit)
+            
+    def printClusterPoints(self):
+        for c in self.clusters:
+            print("Points for cluster at " + str(c.getLocation()))
+            c.printPoints()
+            
+    def printClusters(self):
+        for c in self.clusters:
+            print(c.getLocation())
+            
+    def printDidChange(self):
+        print(self.didChange)
+        
+    def printDistances(self):
+        for key in self.keys:
+            best = -1.0
+            closest = 10000000.0
+            for c in self.clusters:
+                d = c.getDistance(key)
+                print("From cluster at " + str(c.getLocation()) + /
+                "to point at " + str(key) + " is: " + str(d)
+                if d < closest:
+                    closest = d
+                    best = c.getLocation()
+            print("Closest to: " + str(best))
+    
+    def printDistribution(self):
+        for key in self.keys:
+            print("Length: " + str(key) + " occurred " + str(self.dist[key]) + " times")
+            
+    def printKeys(self):
+        for key in self.keys:
+            print(key)
+        
         
     
 def decodeBitsAdvanced(bits):
