@@ -23,6 +23,8 @@ import java.util.Scanner;
 
 public class MorseCodeDecoder {
     private static int tu;
+    private static float thresh13;
+    private static float thresh37;
     
     /**
      * Given a string of bits beginning and ending with '1's,
@@ -87,6 +89,39 @@ public class MorseCodeDecoder {
         return tele;
     }
     
+     /**
+     * Given a string of ones and its following strings of zeros,
+     * returns the Morse symbol (e.g. dot, dash, new-letter, new-word)
+     * which these ones and zeros signify).
+     * 
+     * @param one
+     * @param zero
+     * @return 
+     */
+    private static String nextTeleFuzzy(String one, String zero) {
+        String tele = "";
+        System.out.println(one + " " + zero);
+        if (one.length() <= thresh13) tele += ".";
+        else tele += "-";
+        if ((zero.length() >= thresh13) && (zero.length() <= thresh37)) tele += " ";
+        else if (zero.length() > thresh37) tele += "   ";
+        return tele;
+    }
+    
+    /**
+     * Given a string of ones, returns the Morse symbol
+     * (i.e. dot or dash) which these ones signify.
+     * 
+     * @param one
+     * @return 
+     */
+    private static String nextTeleFuzzy(String one) {
+        String tele = "";
+        if (one.length() <= thresh13) tele += ".";
+        else tele += "-";
+        return tele;
+    }
+    
     /**
      * Given a string of bits, which may or may not begin or end with '0's,
      * returns the Morse Code translation of this message.
@@ -105,6 +140,24 @@ public class MorseCodeDecoder {
             morse += nextTele(ones[i], zeros[i + 1]);
         }
         morse += nextTele(ones[ones.length - 1]);
+        return morse;
+    }
+    
+    public static String decodeFuzzyBits(String fuzzyBits) {
+        String morse = "";
+        fuzzyBits = fuzzyBits.replaceAll("^[0]+", "");
+        fuzzyBits = fuzzyBits.replaceAll("[0]+$", "");
+        KMeans km = new KMeans(fuzzyBits, 3);
+        km.converge();
+        thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2;
+        thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2;
+        System.out.println(thresh13 + " " + thresh37);
+        String[] ones = fuzzyBits.split("0+");
+        String[] zeros = fuzzyBits.split("1+");
+        for (int i = 0; i < zeros.length - 1; i++) {
+            morse += nextTeleFuzzy(ones[i], zeros[i + 1]);
+        }
+        morse += nextTeleFuzzy(ones[ones.length - 1]);
         return morse;
     }
     
@@ -134,9 +187,10 @@ public class MorseCodeDecoder {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String bits = "1";
+        String fuzzyBits = "0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000";
 //        MorseCodeDecoder.getTimeUnit(bits);
-        String morse = MorseCodeDecoder.decodeBits(bits);
+        String morse = MorseCodeDecoder.decodeFuzzyBits(fuzzyBits);
+        System.out.println(morse);
         String msg = MorseCodeDecoder.decodeMorse(morse);
         System.out.println(msg);
     }
