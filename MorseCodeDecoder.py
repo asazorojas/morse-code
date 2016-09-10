@@ -65,11 +65,12 @@ class Cluster(object):
         del self.currentPoints[:]
         
     def update(self):
-        s = 0.0
-        for p in self.currentPoints:
-            s += p
-        self.centroid = s / len(self.currentPoints)
-        self.location = self.centroid
+        if len(self.currentPoints) > 0:
+            s = 0.0
+            for p in self.currentPoints:
+                s += p
+            self.centroid = s / len(self.currentPoints)
+            self.location = self.centroid
     
     def getLocation(self):
         return self.location
