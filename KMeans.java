@@ -123,9 +123,6 @@ public class KMeans {
     
     public KMeans(String stream, int numClusters) {
         this.clusters = new Cluster[numClusters];
-        for (int i = 0; i < clusters.length; i++) {
-            clusters[i] = new Cluster(0);
-        }
         stream = stream.replaceAll("^[0]+", ""); // remove leading 0s
         stream = stream.replaceAll("[0]+$", ""); // remove trailing 0s
         
