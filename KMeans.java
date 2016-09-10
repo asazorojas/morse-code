@@ -131,7 +131,7 @@ public class KMeans {
     private final Cluster[] clusters;
     private final int numClusters;
     private final String[] bitCollection;
-    private float tu = 0;
+    private float[] tu = {0, 0, 0};
     private final HashMap<Integer, Integer> dist = new HashMap<>();
     Random rand = new Random();
     List<Integer> keys;
@@ -250,6 +250,14 @@ public class KMeans {
         }
     }
     
+    public void calculateTimeUnits() {
+        Cluster[] sortedClusters = clusters.clone();
+        Arrays.sort(sortedClusters);
+        tu[0] = sortedClusters[0].getLocation();
+        tu[1] = sortedClusters[1].getLocation() / 3;
+        tu[2] = sortedClusters[2].getLocation() / 7;
+    }
+    
     public void clear() {
         for (Cluster c: clusters) c.clearPoints();
     }
@@ -260,6 +268,7 @@ public class KMeans {
             update();
             assignToClosestCluster();
         } while (didChange());
+        calculateTimeUnits();
     }
     
     public boolean didChange() {
@@ -284,15 +293,7 @@ public class KMeans {
      *
      */
     public Cluster[] getClusters() { return this.clusters; }
-    public float getTimeUnit() {
-        Cluster[] sortedClusters = clusters.clone();
-        Arrays.sort(sortedClusters);
-        for (Cluster c: sortedClusters) System.out.print(c.getLocation() + " ");
-        tu += sortedClusters[0].getLocation();
-        tu += sortedClusters[1].getLocation() / 3;
-        tu += sortedClusters[2].getLocation() / 7;
-        return tu / 3;
-    }
+    public float getTimeUnit(int index) { return this.tu[index]; }
     /**
      * Printers.
      */
@@ -343,6 +344,6 @@ public class KMeans {
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
         km.converge();
-        System.out.println(km.getTimeUnit());
+        System.out.println(km.getTimeUnit(0));
     }
 }
