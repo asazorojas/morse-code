@@ -36,8 +36,8 @@ public class KMeans {
      * in the KMeans algorithm.
      */
     private static class Cluster implements Comparable<Cluster> {
-        private float currentLocation;
-        private float currentCentroid;
+        private float location;
+        private float centroid;
         private ArrayList<Integer> currentPoints = new ArrayList<>();
         private ArrayList<Integer> previousPoints = new ArrayList<>();
         
@@ -45,15 +45,15 @@ public class KMeans {
          * Constructors
          */
         private Cluster(float loc) {
-            currentLocation = loc;
+            location = loc;
         }
         
         private Cluster() {
-            currentLocation = -1;
+            location = -1;
         }
         
         /**
-         * Methods for claiming currentPoints and calculating currentCentroid.
+         * Methods for claiming currentPoints and calculating centroid.
          */
         private void addPoint(int i) {
             currentPoints.add(i);
@@ -79,24 +79,24 @@ public class KMeans {
             for (Integer p: currentPoints) {
                 sum += p;
             }
-            currentCentroid = sum / currentPoints.size();
-            setLocation(currentCentroid);
+            centroid = sum / currentPoints.size();
+            setLocation(centroid);
         }
                 
         /**
          * Getters and Setters.
          */
-        private float getLocation() { return currentLocation; }
+        private float getLocation() { return location; }
         private float getDistance(int point) {
-            return Math.abs(currentLocation - point);
+            return Math.abs(location - point);
         }
-        private void setLocation(float loc) { currentLocation = loc; }
+        private void setLocation(float loc) { location = loc; }
         
         /**
          * Printers.
          */
-        private void printCentroid() { System.out.println(currentCentroid); }
-        private void printLocation() { System.out.println(currentLocation); }
+        private void printCentroid() { System.out.println(centroid); }
+        private void printLocation() { System.out.println(location); }
         private void printPoints() {
             for (Integer p: currentPoints)
                 System.out.print(p + " ");
