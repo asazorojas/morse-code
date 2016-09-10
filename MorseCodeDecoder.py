@@ -59,7 +59,7 @@ class Cluster(object):
         if len(self.currentPoints) != len(self.previousPoints):
             return True
         else:
-            return !self.currentPoints == self.previousPoints
+            return not (self.currentPoints == self.previousPoints)
     
     def clearPoints(self):
         self.previousPoints = self.currentPoints[:]
@@ -77,6 +77,25 @@ class Cluster(object):
         
     def getDistance(self, point):
         return abs(self.location - point)
+        
+    def printCentroid(self):
+        print(self.centroid)
+    
+    def printLocation(self):
+        print(self.location)
+        
+    def printPoints(self):
+        result = ""
+        for point in self.currentPoints:
+            result += str(point) + " "
+        print(result[:-1])
+    
+    def printPreviousPoints(self):
+        result = ""
+        for point in self.previousPoints:
+            result += str(point) + " "
+        print(result[:-1])
+            
 
 
 def decodeBitsAdvanced(bits):
