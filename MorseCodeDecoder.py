@@ -156,6 +156,28 @@ class KMeans(object):
     def clear(self):
         for c in self.clusters:
             c.clearPoints()
+            
+    def converge(self):
+        self.assignToClosestCluster()
+        while True:
+            self.update()
+            self.assignToClosestCluster()
+            if self.didChange():
+                break
+        self.calculateTimeUnits()
+        
+    def didChange(self):
+        for c in self.clusters:
+            if c.didChange():
+                return True
+        return False
+        
+    def update(self):
+        for c in self.clusters:
+            c.update()
+            
+    def getTimeUnit(self, index):
+        return this.timeUnits[index]
         
         
     
