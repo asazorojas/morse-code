@@ -44,13 +44,11 @@ heyJude = ".... . -.--   .--- ..- -.. ."
 JudeBits = "00011001100110011000000110000001111110011001111110011111100000000000000110011111100111111001111110000001100110011111100000011111100110011000000110000"
 fuzzyBits = "0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000"
 
-class Cluster(object):
-    location = None
-    centroid = None
-    currentPoints = []
-    previousPoints = []
-    
+class Cluster(object):    
     def __init__(self, loc):
+        self.currentPoints = []
+        self.centroid = None
+        self.previousPoints = []
         self.location = loc
     
     def addPoint(self, point):
@@ -67,10 +65,10 @@ class Cluster(object):
         self.currentPoints.clear()
         
     def update(self):
-        sum = 0.0
+        s = 0.0
         for p in self.currentPoints:
-            sum += p
-        self.centroid = sum / len(self.currentPoints)
+            s += p
+        self.centroid = s / len(self.currentPoints)
         self.location = self.centroid
     
     def getLocation(self):
@@ -99,13 +97,13 @@ class Cluster(object):
         
 
 class KMeans(object):
-    clusters = []
-    bitCollection = []
-    timeUnits = [0,0,0]
-    dist = {}
-    keys = []
-    
     def __init__(self, stream, numClusters):
+        self.clusters = []
+        self.bitCollection = []
+        self.timeUnits = [0,0,0]
+        self.dist = {}
+        self.keys = []
+        
         stream = stream.strip("0")
         
         if len(stream) == 0:
@@ -132,7 +130,7 @@ class KMeans(object):
         
     def initializeClusters(self):
         self.clusters.append(Cluster(float(self.keys[0])))
-        self.clusters.append(Cluster((float(self.keys[0]) + float(self.keys[-1])) / 2 + 1))
+        self.clusters.append(Cluster((float(self.keys[0]) + float(self.keys[-1])) / 2))
         self.clusters.append(Cluster(float(self.keys[-1])))
         
     def assignToClosestCluster(self):
@@ -149,9 +147,8 @@ class KMeans(object):
                 bestCluster.addPoint(key)
                 
     def calculateTimeUnits(self):
-        sortedClusters = sorted(self.clusters, key = lambda x: x.getLocation(), reverse = False)
         for i in range(3):
-            self.timeUnits[i] = sortedClusters[i].getLocation()
+            self.timeUnits[i] = self.clusters[i].getLocation()
             
     def clear(self):
         for c in self.clusters:
@@ -162,7 +159,7 @@ class KMeans(object):
         while True:
             self.update()
             self.assignToClosestCluster()
-            if self.didChange():
+            if not self.didChange():
                 break
         self.calculateTimeUnits()
         
@@ -233,14 +230,10 @@ def decodeBitsAdvanced(fuzzyBits):
     km.converge()
     thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2
     thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2
-    
-    print(thresh13, thresh37)
-    km.printTimeUnits()
     ones = re.split("0+", fuzzyBits)
     zeros = re.split("1+", fuzzyBits)
     for i in range(len(zeros) - 1):
         morse += nextTelePairFuzzy(ones[i], zeros[i + 1], thresh13, thresh37)
-        print(nextTelePairFuzzy(ones[i], zeros[i + 1], thresh13, thresh37))
     return morse
 
 
