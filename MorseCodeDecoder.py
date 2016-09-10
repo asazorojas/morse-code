@@ -104,6 +104,7 @@ class KMeans(object):
         self.timeUnits = [0,0,0]
         self.dist = {}
         self.keys = []
+        self.converged = False
         
         stream = stream.strip("0")
         
@@ -127,7 +128,14 @@ class KMeans(object):
             else:
                 self.dist[l] = 1
         self.keys = sorted(self.dist.keys())
-        self.initializeClusters()
+        
+        if len(self.keys) == 1 or len(self.keys) == 2:
+            self.timeUnits[0] = self.keys[0]
+            self.timeUnits[1] = self.keys[0] * 3
+            self.timeUnits[2] = self.keys[0] * 7
+            self.converged = True
+        else:
+            self.initializeClusters()
         
     def initializeClusters(self):
         self.clusters.append(Cluster(float(self.keys[0])))
@@ -156,13 +164,14 @@ class KMeans(object):
             c.clearPoints()
             
     def converge(self):
-        self.assignToClosestCluster()
-        while True:
-            self.update()
+        if not self.converged:
             self.assignToClosestCluster()
-            if not self.didChange():
-                break
-        self.calculateTimeUnits()
+            while not self.converged:
+                self.update()
+                self.assignToClosestCluster()
+                if not self.didChange():
+                    self.converged = True
+            self.calculateTimeUnits()
         
     def didChange(self):
         for c in self.clusters:
@@ -231,6 +240,11 @@ def decodeBitsAdvanced(fuzzyBits):
     km.converge()
     thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2
     thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2
+    print(km.getTimeUnit(0), km.getTimeUnit(1), km.getTimeUnit(2))
+    print(thresh13, thresh37)
+    if thresh13 == thresh37:
+        thresh37 = thresh13 / 2.0 * 5.0
+    print(thresh13, thresh37)
     ones = re.split("0+", fuzzyBits)
     zeros = re.split("1+", fuzzyBits)
     for i in range(len(zeros) - 1):
@@ -266,7 +280,7 @@ def getTimeUnit(bits):
 
 def nextTelePairFuzzy(one, zero, thresh13, thresh37):
     tele = nextTeleSingleFuzzy(one, thresh13)
-    if len(zero) >= thresh13 and len(zero) <= thresh37:
+    if len(zero) > thresh13 and len(zero) < thresh37:
         tele += " "
     elif len(zero) > thresh37:
         tele += "   "
@@ -330,7 +344,3 @@ def decodeMorse(morseCode):
     return result
 
 
-print(decodeBits(JudeBits))
-print(decodeMorse(decodeBits(JudeBits)))
-print(decodeBitsAdvanced(fuzzyBits))
-print(decodeMorse(decodeBitsAdvanced(fuzzyBits)))
