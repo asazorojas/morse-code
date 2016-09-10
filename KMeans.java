@@ -254,6 +254,14 @@ public class KMeans {
         for (Cluster c: clusters) c.clearPoints();
     }
     
+    public void converge() {
+        assignToClosestCluster();
+        do {
+            update();
+            assignToClosestCluster();
+        } while (didChange());
+    }
+    
     public boolean didChange() {
         for (Cluster c: clusters) if (c.didChange()) return true;
         return false;
@@ -334,11 +342,7 @@ public class KMeans {
     
     public static void main(String[] args) {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
-        km.assignToClosestCluster();
-        do {
-            km.update();
-            km.assignToClosestCluster();
-        } while (km.didChange());
+        km.converge();
         System.out.println(km.getTimeUnit());
     }
 }
