@@ -181,7 +181,7 @@ public class KMeans {
             else dist.put(l, dist.get(l) + 1);
         }
         this.keys = new ArrayList<>(dist.keySet());
-        initializeClustersRandomly();
+        initializeClusters();
     }
     
     /**
