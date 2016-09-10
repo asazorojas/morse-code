@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +35,7 @@ public class KMeans {
      * This class provides data structures and methods for clusters
      * in the KMeans algorithm.
      */
-    private static class Cluster {
+    private static class Cluster implements Comparable<Cluster> {
         private float currentLocation;
         private float previousLocation = -5000;
         private float currentCentroid;
@@ -115,6 +116,13 @@ public class KMeans {
                 System.out.print(p + " ");
             System.out.println();
         }
+
+        @Override
+        public int compareTo(Cluster t) {
+            if (this.getLocation() > t.getLocation()) return 1;
+            else if (this.getLocation() < t.getLocation()) return -1;
+            else return 0;
+        }
     }
     
     /**
@@ -123,7 +131,7 @@ public class KMeans {
     private final Cluster[] clusters;
     private final int numClusters;
     private final String[] bitCollection;
-    private final int tu = -1;
+    private int tu = 0;
     private final HashMap<Integer, Integer> dist = new HashMap<>();
     Random rand = new Random();
     List<Integer> keys;
@@ -269,7 +277,9 @@ public class KMeans {
      */
     public Cluster[] getClusters() { return this.clusters; }
     public float getTimeUnit() {
-        float tu = 0;
+        Cluster[] sortedClusters = clusters.clone();
+        Arrays.sort(sortedClusters);
+        for (Cluster c: sortedClusters) c.printLocation();
         tu += clusters[0].getLocation();
         tu += clusters[1].getLocation() / 3;
         tu += clusters[2].getLocation() / 7;
