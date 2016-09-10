@@ -242,8 +242,6 @@ def decodeBitsAdvanced(fuzzyBits):
     thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2
     print(km.getTimeUnit(0), km.getTimeUnit(1), km.getTimeUnit(2))
     print(thresh13, thresh37)
-    if thresh13 == thresh37:
-        thresh37 = thresh13 / 2.0 * 5.0
     print(thresh13, thresh37)
     ones = re.split("0+", fuzzyBits)
     zeros = re.split("1+", fuzzyBits)
