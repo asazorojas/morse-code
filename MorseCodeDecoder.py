@@ -138,7 +138,7 @@ class KMeans(object):
     def assignToClosestCluster(self):
         self.clear()
         for key in self.keys:
-            bestCluster = Cluster(-5000)
+            bestCluster = Cluster(5000)
             closest = 10000000.0
             for c in self.clusters:
                 d = c.getDistance(key)
@@ -177,7 +177,7 @@ class KMeans(object):
             c.update()
             
     def getTimeUnit(self, index):
-        return this.timeUnits[index]
+        return self.timeUnits[index]
         
     def printBitCollection(self):
         for bit in self.bitCollection:
@@ -201,8 +201,8 @@ class KMeans(object):
             closest = 10000000.0
             for c in self.clusters:
                 d = c.getDistance(key)
-                print("From cluster at " + str(c.getLocation()) + /
-                "to point at " + str(key) + " is: " + str(d)
+                print("From cluster at " + str(c.getLocation()) + \
+                "to point at " + str(key) + " is: " + str(d))
                 if d < closest:
                     closest = d
                     best = c.getLocation()
@@ -218,13 +218,23 @@ class KMeans(object):
         
         
     
-def decodeBitsAdvanced(bits):
+def decodeBitsAdvanced(fuzzyBits):
     '''
     input bits, a string of 0s and 1s with variable timing
     returns string, a morse code message
     '''
-    # ToDo: Accept 0's and 1's, return dots, dashes and spaces
-    return bits.replace('111', '-').replace('000', ' ').replace('1', '.').replace('0', '')
+    morse = ""
+    fuzzyBits = fuzzyBits.strip("0")
+    km = KMeans(fuzzyBits, 3)
+    km.converge()
+    thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2
+    thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2
+    ones = re.split("0+", fuzzyBits)
+    zeros = re.split("1+", fuzzyBits)
+    for i in range(len(zeros) - 1):
+        morse += nextTelePairFuzzy(ones[i], zeros[i + 1], thresh13, thresh37)
+    return morse
+
 
 def getTimeUnit(bits):
     '''
@@ -250,6 +260,27 @@ def getTimeUnit(bits):
             zs = min(zs, len(z[i]))
             break
     return min(os, zs)
+
+
+def nextTelePairFuzzy(one, zero, thresh13, thresh37):
+    tele = nextTeleSingleFuzzy(one, thresh13)
+    if len(one) <= thresh13:
+        tele += "."
+    else:
+        tele += "-"
+    if len(zero) >= thresh13 and len(zero) <= thresh37:
+        tele += " "
+    elif len(zero) > thresh37:
+        tele += "   "
+    return tele
+    
+def nextTeleSingleFuzzy(one, thresh13):
+    tele = ""
+    if len(one) <= thresh13:
+        tele += "."
+    else:
+        tele += "-"
+    return tele
 
 
 def nextTelePair(one, zero, tu):
@@ -303,3 +334,4 @@ def decodeMorse(morseCode):
 
 print(decodeBits(JudeBits))
 print(decodeMorse(decodeBits(JudeBits)))
+print(decodeBitsAdvanced(fuzzyBits))
