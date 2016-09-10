@@ -280,9 +280,9 @@ def getTimeUnit(bits):
 
 def nextTelePairFuzzy(one, zero, thresh13, thresh37):
     tele = nextTeleSingleFuzzy(one, thresh13)
-    if len(zero) > thresh13 and len(zero) < thresh37:
+    if len(zero) >= thresh13 and len(zero) < thresh37:
         tele += " "
-    elif len(zero) > thresh37:
+    elif len(zero) >= thresh37:
         tele += "   "
     return tele
     
