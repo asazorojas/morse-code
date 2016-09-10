@@ -1,4 +1,6 @@
 import re
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 MORSE_CODE = {
     ".-": "A",
@@ -226,6 +228,19 @@ class KMeans(object):
     def printTimeUnits(self):
         for t in self.timeUnits:
             print(t)
+    
+    def plotDistribution(self):
+        xmax = max(self.keys)
+        ymax = max(self.dist.values())
+        plt.figure()
+        plt.bar(self.dist.keys(), self.dist.values())
+        plt.title("Bit Length Frequencies")
+        plt.xlabel("Number of Characters")
+        plt.ylabel("Frequency")
+        plt.axis([0, xmax, 0, ymax])
+        plt.axvline((self.getTimeUnit(0) + self.getTimeUnit(1)) / 2, color='b', linestyle='dashed', linewidth=2)
+        plt.axvline((self.getTimeUnit(1) + self.getTimeUnit(2)) / 2, color='b', linestyle='dashed', linewidth=2)
+        plt.show()
         
         
     
@@ -240,8 +255,6 @@ def decodeBitsAdvanced(fuzzyBits):
     km.converge()
     thresh13 = 1.2 * (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2
     thresh37 = 1.1 * (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2
-    print(km.getTimeUnit(0), km.getTimeUnit(1), km.getTimeUnit(2))
-    print(thresh13, thresh37)
     ones = re.split("0+", fuzzyBits)
     zeros = re.split("1+", fuzzyBits)
     for i in range(len(zeros) - 1):
