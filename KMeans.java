@@ -221,7 +221,6 @@ public class KMeans {
      * centroids and move accordingly.
      */
     public void assignToClosestCluster() {
-        this.printClusterPoints();
         clear();
         for (Integer i: keys) {
             Cluster bestCluster = new Cluster();

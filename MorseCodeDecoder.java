@@ -37,7 +37,6 @@ public class MorseCodeDecoder {
         if (o.length == 1) return bits.length(); //bits is all 1's, so E
         int os = o[0].length();
         for (int i = 1; i < o.length - 1; i++) {
-            System.out.println(o[i]);
             int t = o[i].length();
             if (t != os) {
                 os = Math.min(os,t);
@@ -47,7 +46,6 @@ public class MorseCodeDecoder {
         String[] z = bits.split("1+");
         int zs = z[1].length();
         for (int i = 2; i < z.length - 1; i++) {
-            System.out.println(z[i]);
             int t = z[i].length();
             if (t != zs) {
                 zs = Math.min(zs,t);
@@ -102,7 +100,6 @@ public class MorseCodeDecoder {
      */
     private static String nextTeleFuzzy(String one, String zero) {
         String tele = "";
-        System.out.println(one + " " + zero);
         if (one.length() <= thresh13) tele += ".";
         else tele += "-";
         if ((zero.length() >= thresh13) && (zero.length() <= thresh37)) tele += " ";
@@ -162,7 +159,6 @@ public class MorseCodeDecoder {
         km.converge();
         thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2;
         thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2;
-        System.out.println(thresh13 + " " + thresh37);
         String[] ones = fuzzyBits.split("0+");
         String[] zeros = fuzzyBits.split("1+");
         for (int i = 0; i < zeros.length - 1; i++) {
