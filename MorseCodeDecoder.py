@@ -215,6 +215,10 @@ class KMeans(object):
     def printKeys(self):
         for key in self.keys:
             print(key)
+    
+    def printTimeUnits(self):
+        for t in self.timeUnits:
+            print(t)
         
         
     
@@ -229,10 +233,14 @@ def decodeBitsAdvanced(fuzzyBits):
     km.converge()
     thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2
     thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2
+    
+    print(thresh13, thresh37)
+    km.printTimeUnits()
     ones = re.split("0+", fuzzyBits)
     zeros = re.split("1+", fuzzyBits)
     for i in range(len(zeros) - 1):
         morse += nextTelePairFuzzy(ones[i], zeros[i + 1], thresh13, thresh37)
+        print(nextTelePairFuzzy(ones[i], zeros[i + 1], thresh13, thresh37))
     return morse
 
 
@@ -264,10 +272,6 @@ def getTimeUnit(bits):
 
 def nextTelePairFuzzy(one, zero, thresh13, thresh37):
     tele = nextTeleSingleFuzzy(one, thresh13)
-    if len(one) <= thresh13:
-        tele += "."
-    else:
-        tele += "-"
     if len(zero) >= thresh13 and len(zero) <= thresh37:
         tele += " "
     elif len(zero) > thresh37:
@@ -335,3 +339,4 @@ def decodeMorse(morseCode):
 print(decodeBits(JudeBits))
 print(decodeMorse(decodeBits(JudeBits)))
 print(decodeBitsAdvanced(fuzzyBits))
+print(decodeMorse(decodeBitsAdvanced(fuzzyBits)))
