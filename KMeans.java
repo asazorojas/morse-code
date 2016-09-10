@@ -173,7 +173,7 @@ public class KMeans {
             else dist.put(l, dist.get(l) + 1);
         }
         this.keys = new ArrayList<>(dist.keySet());
-        initializeClusters();
+        initializeClustersRandomly();
     }
     
     /**
@@ -183,8 +183,8 @@ public class KMeans {
      */
     private void initializeClusters() {
         clusters[0] = new Cluster(keys.get(0));
-        clusters[1] = new Cluster(keys.get(keys.size() - 1));
-        clusters[2] = new Cluster(
+        clusters[2] = new Cluster(keys.get(keys.size() - 1));
+        clusters[1] = new Cluster(
             (keys.get(keys.size() - 1) - keys.get(0)) / 2 + 1);
     }
     
@@ -262,6 +262,19 @@ public class KMeans {
     public void update() {
         for (Cluster c: clusters) c.update();
     }
+    
+    /**
+     * Getters and Setters.
+     *
+     */
+    public Cluster[] getClusters() { return this.clusters; }
+    public float getTimeUnit() {
+        float tu = 0;
+        tu += clusters[0].getLocation();
+        tu += clusters[1].getLocation() / 3;
+        tu += clusters[2].getLocation() / 7;
+        return tu / 3;
+    }
     /**
      * Printers.
      */
@@ -316,5 +329,6 @@ public class KMeans {
             km.update();
             km.assignToClosestCluster();
         } while (km.didChange());
+        System.out.println(km.getTimeUnit());
     }
 }
