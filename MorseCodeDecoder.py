@@ -54,6 +54,7 @@ class Cluster(object):
         self.previousPoints = []
         self.location = loc
     
+    ##  Methods for claiming currentPoints and calculating centroid.
     def addPoint(self, point):
         self.currentPoints.append(point)
         
@@ -66,8 +67,15 @@ class Cluster(object):
     def clearPoints(self):
         self.previousPoints = self.currentPoints[:]
         del self.currentPoints[:]
-        
+    
+    
+    
     def update(self):
+        '''
+        After new points have been assigned to this cluster, this method
+        calculates the new centroid of the cluster and moves the cluster
+        to that location.
+        '''
         if len(self.currentPoints) > 0:
             s = 0.0
             for p in self.currentPoints:
@@ -75,12 +83,15 @@ class Cluster(object):
             self.centroid = s / len(self.currentPoints)
             self.location = self.centroid
     
+    
+    ##  Getter methods.
     def getLocation(self):
         return self.location
         
     def getDistance(self, point):
         return abs(self.location - point)
-        
+    
+    ##  Printer methods.
     def printCentroid(self):
         print(self.centroid)
     
@@ -111,6 +122,7 @@ class KMeans(object):
         
         stream = stream.strip("0")
         
+        ##  Populate this.bitCollection.
         if len(stream) == 0:
             self.bitCollection.append("")
         else:
@@ -124,6 +136,8 @@ class KMeans(object):
                     self.bitCollection.append(zeros[i + 1])
                 self.bitCollection.append(ones[-1])
         
+        
+        ##  Populate this.dist.
         for bit in self.bitCollection:
             l = len(bit)
             if l in self.dist:
@@ -132,20 +146,33 @@ class KMeans(object):
                 self.dist[l] = 1
         self.keys = sorted(self.dist.keys())
         
+        ##  Handle short inputs (i.e. displays fewer than three timing units)
         if len(self.keys) == 1 or len(self.keys) == 2:
             self.timeUnits[0] = self.keys[0]
             self.timeUnits[1] = self.keys[0] * 3
             self.timeUnits[2] = self.keys[0] * 7
             self.converged = True
+        
+        ##  Handle long inputs via KMeans
         else:
             self.initializeClusters()
         
     def initializeClusters(self):
+        '''
+        Populates this.clusters with this.numClusters Cluster objects,
+        whose initial locations are from this.keys (the minimum, the
+        maximum, and the middle between the two).
+        '''
         self.clusters.append(Cluster(float(self.keys[0])))
         self.clusters.append(Cluster((float(self.keys[0]) + float(self.keys[-1])) / 2))
         self.clusters.append(Cluster(float(self.keys[-1])))
         
     def assignToClosestCluster(self):
+        '''
+        Assigns cluster-labels to each length-point from the fuzzy input,
+        which is subsequently used by the clusters to re-calculate their
+        centroids and move accordingly.
+        '''
         self.clear()
         for key in self.keys:
             bestCluster = Cluster(5000)
@@ -167,6 +194,12 @@ class KMeans(object):
             c.clearPoints()
             
     def converge(self):
+        '''
+        Assigns the closest Cluster to each point, calculates the centroid
+        for those Clusters based off of those points, moves the Clusters
+        to their respective centroids, and repeats until assignment on the next
+        iteration is the same.
+        '''
         if not self.converged:
             self.assignToClosestCluster()
             while not self.converged:
@@ -185,10 +218,12 @@ class KMeans(object):
     def update(self):
         for c in self.clusters:
             c.update()
-            
+    
+    ##  Getter methods.
     def getTimeUnit(self, index):
         return self.timeUnits[index]
         
+    ##  Printer methods.
     def printBitCollection(self):
         for bit in self.bitCollection:
             print(bit)
@@ -230,6 +265,7 @@ class KMeans(object):
         for t in self.timeUnits:
             print(t)
     
+    ##  Plotter methods.
     def plotDistribution(self):
         xmax = max(self.keys)
         ymax = max(self.dist.values())
