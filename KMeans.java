@@ -254,8 +254,8 @@ public class KMeans {
         Cluster[] sortedClusters = clusters.clone();
         Arrays.sort(sortedClusters);
         tu[0] = sortedClusters[0].getLocation();
-        tu[1] = sortedClusters[1].getLocation() / 3;
-        tu[2] = sortedClusters[2].getLocation() / 7;
+        tu[1] = sortedClusters[1].getLocation();
+        tu[2] = sortedClusters[2].getLocation();
     }
     
     public void clear() {
@@ -345,5 +345,7 @@ public class KMeans {
         KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
         km.converge();
         System.out.println(km.getTimeUnit(0));
+        System.out.println(km.getTimeUnit(1));
+        System.out.println(km.getTimeUnit(2));
     }
 }
