@@ -147,6 +147,13 @@ public class MorseCodeDecoder {
         return morse;
     }
     
+    /**
+     * Given a string of bits, which may or may not begin or end with '0's,
+     * and which may have some variation in the length of the time unit used,
+     * returns the Morse Code translation of this message.
+     * @param fuzzyBits
+     * @return 
+     */
     public static String decodeFuzzyBits(String fuzzyBits) {
         String morse = "";
         fuzzyBits = fuzzyBits.replaceAll("^[0]+", "");
