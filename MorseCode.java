@@ -58,6 +58,6 @@ public class MorseCode {
         if (m.equals("---..")) return "8";
         if (m.equals("----.")) return "9";
         if (m.equals("...---...")) return "SOS";
-        else return "We don't know";
+        else return "[\"" + m + "\" not found]";
     }
 }
