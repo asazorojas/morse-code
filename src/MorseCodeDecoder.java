@@ -186,6 +186,7 @@ public class MorseCodeDecoder {
         /**
          * KMeans attributes.
          */
+        private boolean converged = false;
         private final Cluster[] clusters;
         private final String[] bitCollection; // for generating frequency dist.
         private float[] timeUnits = {0, 0, 0};
@@ -233,7 +234,16 @@ public class MorseCodeDecoder {
                 else dist.put(l, dist.get(l) + 1);
             }
             this.keys = new ArrayList<>(dist.keySet());
-            initializeClusters();
+            
+            if (keys.size() == 1 || keys.size() == 2) {
+                timeUnits[0] = keys.get(0);
+                timeUnits[1] = keys.get(0) * 3;
+                timeUnits[2] = keys.get(0) * 7;
+                converged = true;
+            }
+            else {
+                initializeClusters();
+            }
         }
 
         /**
@@ -295,12 +305,15 @@ public class MorseCodeDecoder {
          * iteration is the same.
          */
         public void converge() {
-            assignToClosestCluster();
-            do {
-                update();
+            if (!converged) {
                 assignToClosestCluster();
-            } while (didChange());
-            calculateTimeUnits();
+                while (!converged) {
+                    update();
+                    assignToClosestCluster();
+                    if (!didChange()) converged = true;
+                }
+                calculateTimeUnits();
+            }
         }
 
         public boolean didChange() {
@@ -320,9 +333,9 @@ public class MorseCodeDecoder {
     }
     
     public static void main(String[] args) {
-        String fuzzyBits = "0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000";
+        String fuzzyBits = "111";
 //        MorseCodeDecoder.getTimeUnit(bits);
-        String morse = MorseCodeDecoder.decodeFuzzyBits(fuzzyBits);
+        String morse = MorseCodeDecoder.decodeBitsAdvanced(fuzzyBits);
         System.out.println(morse);
         String msg = MorseCodeDecoder.decodeMorse(morse);
         System.out.println(msg);
