@@ -1,3 +1,6 @@
+
+import java.util.HashMap;
+
 /*
  * Copyright (C) 2016 Michael <GrubenM@GMail.com>
  *
@@ -20,44 +23,48 @@
  * @author Michael <GrubenM@GMail.com>
  */
 public class MorseCode {
+    private static final HashMap<String, String> MORSE_CODE = new HashMap<String, String>() {{
+        put(".-", "A");
+        put(".-", "A");
+        put("-...", "B");
+        put("-.-.", "C");
+        put("-..", "D");
+        put(".", "E");
+        put("..-.", "F");
+        put("--.", "G");
+        put("....", "H");
+        put("..", "I");
+        put(".---", "J");
+        put("-.-", "K");
+        put(".-..", "L");
+        put("--", "M");
+        put("-.", "N");
+        put("---", "O");
+        put(".--.", "P");
+        put("--.-", "Q");
+        put(".-.", "R");
+        put("...", "S");
+        put("-", "T");
+        put("..-", "U");
+        put("...-", "V");
+        put(".--", "W");
+        put("-..-", "X");
+        put("-.--", "Y");
+        put("--..", "Z");
+        put("-----", "0");
+        put(".----", "1");
+        put("..---", "2");
+        put("...--", "3");
+        put("....-", "4");
+        put(".....", "5");
+        put("-....", "6");
+        put("--...", "7");
+        put("---..", "8");
+        put("----.", "9");
+        put("...---...", "SOS");
+    }};
+    
     public static String get(String m) {
-        if (m.equals(".-")) return "A";
-        if (m.equals("-...")) return "B";
-        if (m.equals("-.-.")) return "C";
-        if (m.equals("-..")) return "D";
-        if (m.equals(".")) return "E";
-        if (m.equals("..-.")) return "F";
-        if (m.equals("--.")) return "G";
-        if (m.equals("....")) return "H";
-        if (m.equals("..")) return "I";
-        if (m.equals(".---")) return "J";
-        if (m.equals("-.-")) return "K";
-        if (m.equals(".-..")) return "L";
-        if (m.equals("--")) return "M";
-        if (m.equals("-.")) return "N";
-        if (m.equals("---")) return "O";
-        if (m.equals(".--.")) return "P";
-        if (m.equals("--.-")) return "Q";
-        if (m.equals(".-.")) return "R";
-        if (m.equals("...")) return "S";
-        if (m.equals("-")) return "T";
-        if (m.equals("..-")) return "U";
-        if (m.equals("...-")) return "V";
-        if (m.equals(".--")) return "W";
-        if (m.equals("-..-")) return "X";
-        if (m.equals("-.--")) return "Y";
-        if (m.equals("--..")) return "Z";
-        if (m.equals("-----")) return "0";
-        if (m.equals(".----")) return "1";
-        if (m.equals("..---")) return "2";
-        if (m.equals("...--")) return "3";
-        if (m.equals("....-")) return "4";
-        if (m.equals(".....")) return "5";
-        if (m.equals("-....")) return "6";
-        if (m.equals("--...")) return "7";
-        if (m.equals("---..")) return "8";
-        if (m.equals("----.")) return "9";
-        if (m.equals("...---...")) return "SOS";
-        else return "[\"" + m + "\" not found]";
+        return MORSE_CODE.get(m);
     }
 }
