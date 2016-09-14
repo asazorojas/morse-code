@@ -70,19 +70,19 @@ public class MorseCodeDecoder {
      * Given a string of bits, which may or may not begin or end with '0's,
      * and which may have some variation in the length of the time unit used,
      * returns the Morse Code translation of this message.
-     * @param fuzzyBits
+     * @param bits
      * @return 
      */
-    public static String decodeFuzzyBits(String fuzzyBits) {
+    public static String decodeBitsAdvanced(String bits) {
         String morse = "";
-        fuzzyBits = fuzzyBits.replaceAll("^[0]+", "");
-        fuzzyBits = fuzzyBits.replaceAll("[0]+$", "");
-        KMeans km = new KMeans(fuzzyBits, 3);
+        bits = bits.replaceAll("^[0]+", "");
+        bits = bits.replaceAll("[0]+$", "");
+        KMeans km = new KMeans(bits, 3);
         km.converge();
         thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2;
         thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2;
-        String[] ones = fuzzyBits.split("0+");
-        String[] zeros = fuzzyBits.split("1+");
+        String[] ones = bits.split("0+");
+        String[] zeros = bits.split("1+");
         for (int i = 0; i < zeros.length - 1; i++) {
             morse += nextTeleFuzzy(ones[i], zeros[i + 1]);
         }
