@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 public class MorseCodeDecoder {
@@ -191,7 +190,6 @@ public class MorseCodeDecoder {
         private final String[] bitCollection; // for generating frequency dist.
         private float[] timeUnits = {0, 0, 0};
         private final HashMap<Integer, Integer> dist = new HashMap<>();
-        Random rand = new Random();
         List<Integer> keys;
 
         public KMeans(String stream, int numClusters) {
