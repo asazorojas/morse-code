@@ -92,17 +92,6 @@ public class KMeans {
         }
         private void setLocation(float loc) { location = loc; }
         
-        /**
-         * Printers.
-         */
-        private void printCentroid() { System.out.println(centroid); }
-        private void printLocation() { System.out.println(location); }
-        private void printPoints() {
-            for (Integer p: currentPoints)
-                System.out.print(p + " ");
-            System.out.println();
-        }
-
         @Override
         public int compareTo(Cluster t) {
             if (this.getLocation() > t.getLocation()) return 1;
@@ -176,42 +165,7 @@ public class KMeans {
         clusters[1] = new Cluster(
             (keys.get(keys.size() - 1) + keys.get(0)) / 2 + 1);
     }
-    
-    /**
-     * Populates this.clusters with this.numClusters Cluster objects,
-     * whose initial locations are randomly chosen from this.keys
-     * without replacement.
-     */
-    private void initializeClustersRandomly() {
-        Set<Integer> picked = new HashSet<>();
-        int j = 0;
-        while (picked.size() < clusters.length) {
-            int t = keys.get(rand.nextInt(keys.size()));
-            if (!picked.contains(t)) {
-                picked.add(t);
-                clusters[j] = new Cluster(t);
-                j++;
-            }
-        }
-    }
-
-    /**
-     * Sets the location of each Cluster in this.clusters to
-     * a location randomly chosen from this.keys without replacement.
-     */
-    private void randomizeClusters() {
-        Set<Integer> picked = new HashSet<>();
-        int j = 0;
-        while (picked.size() < clusters.length) {
-            int t = keys.get(rand.nextInt(keys.size()));
-            if (!picked.contains(t)) {
-                picked.add(t);
-                clusters[j].setLocation(t);
-                j++;
-            }
-        }
-    }
-    
+        
     /**
      * Assigns cluster-labels to each length-point from the fuzzy input,
      * which is subsequently used by the clusters to re-calculate their
@@ -280,60 +234,5 @@ public class KMeans {
      * Getters and Setters.
      *
      */
-    public Cluster[] getClusters() { return this.clusters; }
     public float getTimeUnit(int index) { return this.timeUnits[index]; }
-    
-    /**
-     * Printers.
-     */
-    public void printBitCollection() {
-        for (String s: bitCollection) System.out.println(s);
-    }
-    public void printClusterPoints() {
-        for (Cluster c: clusters) {
-            System.out.println("Points for cluster at " + c.getLocation());
-            c.printPoints();
-        }
-    }
-    public void printClusters() {
-        for (Cluster c: clusters) {
-            System.out.println(c.getLocation());
-        }
-    }
-    public void printDidChange() {
-        System.out.println(didChange());
-    }
-    public void printDistances() {
-        for (Integer i: keys) {
-            float best = -1;
-            float closest = Float.MAX_VALUE;
-            for (Cluster c: clusters) {
-                System.out.print("From cluster at " + c.getLocation());
-                System.out.print(" to point at " + i + " is: ");
-                float d = c.getDistance(i);
-                System.out.println(d);
-                if (d < closest) {
-                    closest = d;
-                    best = c.getLocation();
-                }
-            }
-            System.out.println("Closest to: " + best);
-        }
-    }
-    public void printDistribution() {
-        for (Entry<Integer, Integer> e: dist.entrySet())
-            System.out.println("Length: " + e.getKey() + 
-                    " occurred " + e.getValue() + " times");
-    }
-    public void printKeys() {
-        for (Integer i: keys) System.out.println(i);
-    }
-    
-    public static void main(String[] args) {
-        KMeans km = new KMeans("0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000", 3);
-        km.converge();
-        System.out.println(km.getTimeUnit(0));
-        System.out.println(km.getTimeUnit(1));
-        System.out.println(km.getTimeUnit(2));
-    }
 }
