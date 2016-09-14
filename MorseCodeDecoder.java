@@ -26,67 +26,6 @@ public class MorseCodeDecoder {
     private static float thresh13;
     private static float thresh37;
     
-    /**
-     * Given a string of bits beginning and ending with '1's,
-     * returns the standard timing unit used in the bit transmission
-     * 
-     * @param bits 
-     */
-    private static int getTimeUnit(String bits) {
-        String[] o = bits.split("0+");
-        if (o.length == 1) return bits.length(); //bits is all 1's, so E
-        int os = o[0].length();
-        for (int i = 1; i < o.length - 1; i++) {
-            int t = o[i].length();
-            if (t != os) {
-                os = Math.min(os,t);
-                break;
-            }
-        }
-        String[] z = bits.split("1+");
-        int zs = z[1].length();
-        for (int i = 2; i < z.length - 1; i++) {
-            int t = z[i].length();
-            if (t != zs) {
-                zs = Math.min(zs,t);
-                break;
-            }
-        }
-        return Math.min(os,zs);
-    }
-    
-    /**
-     * Given a string of ones and its following strings of zeros,
-     * returns the Morse symbol (e.g. dot, dash, new-letter, new-word)
-     * which these ones and zeros signify).
-     * 
-     * @param one
-     * @param zero
-     * @return 
-     */
-    private static String nextTele(String one, String zero) {
-        String tele = "";
-        if (one.length() == tu) tele += ".";
-        else if (one.length() == 3 * tu) tele += "-";
-        if (zero.length() == 3 * tu) tele += " ";
-        else if (zero.length() == 7 * tu) tele += "   ";
-        return tele;
-    }
-    
-    /**
-     * Given a string of ones, returns the Morse symbol
-     * (i.e. dot or dash) which these ones signify.
-     * 
-     * @param one
-     * @return 
-     */
-    private static String nextTele(String one) {
-        String tele = "";
-        if (one.length() == tu) tele += ".";
-        else if (one.length() == 3 * tu) tele += "-";
-        return tele;
-    }
-    
      /**
      * Given a string of ones and its following strings of zeros,
      * returns the Morse symbol (e.g. dot, dash, new-letter, new-word)
@@ -121,27 +60,6 @@ public class MorseCodeDecoder {
         if (one.length() <= thresh13) tele += ".";
         else tele += "-";
         return tele;
-    }
-    
-    /**
-     * Given a string of bits, which may or may not begin or end with '0's,
-     * returns the Morse Code translation of this message.
-     * 
-     * @param bits
-     * @return 
-     */
-    public static String decodeBits(String bits) {
-        String morse = "";
-        bits = bits.replaceAll("^[0]+", "");
-        bits = bits.replaceAll("[0]+$", "");
-        tu = getTimeUnit(bits);
-        String[] ones = bits.split("0+");
-        String[] zeros = bits.split("1+");
-        for (int i = 0; i < zeros.length - 1; i++) {
-            morse += nextTele(ones[i], zeros[i + 1]);
-        }
-        morse += nextTele(ones[ones.length - 1]);
-        return morse;
     }
     
     /**
@@ -189,17 +107,5 @@ public class MorseCodeDecoder {
           else results += MorseCode.get(nxt);
         }
         return results;
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        String fuzzyBits = "0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000";
-//        MorseCodeDecoder.getTimeUnit(bits);
-        String morse = MorseCodeDecoder.decodeFuzzyBits(fuzzyBits);
-        System.out.println(morse);
-        String msg = MorseCodeDecoder.decodeMorse(morse);
-        System.out.println(msg);
-    }
-    
+    }    
 }
