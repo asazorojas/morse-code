@@ -20,12 +20,5 @@
  * @author Michael <GrubenM@GMail.com>
  */
 public class Test {
-    public boolean testAndPrint(String got, String expected) {
-    if (got.equals(expected)) {
-        test.expect(True);
-    }
-                else {
-        print "<pre style='display:inline'>Got '%s', expected '%s'</pre>" % (got, expected);
-        test.expect(False);
-                }
+
 }
