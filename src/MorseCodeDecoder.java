@@ -144,27 +144,32 @@ public class MorseCodeDecoder {
         return morse;
     }
     
+
     /**
      * Given a string of bits, which may or may not begin or end with '0's,
      * and which may have some variation in the length of the time unit used,
      * returns the Morse Code translation of this message.
-     * @param fuzzyBits
+     * @param bits
      * @return 
      */
-    public static String decodeFuzzyBits(String fuzzyBits) {
+    public static String decodeBitsAdvanced(String bits) {
         String morse = "";
-        fuzzyBits = fuzzyBits.replaceAll("^[0]+", "");
-        fuzzyBits = fuzzyBits.replaceAll("[0]+$", "");
-        KMeans km = new KMeans(fuzzyBits, 3);
+        bits = bits.replaceAll("^[0]+", "");
+        bits = bits.replaceAll("[0]+$", "");
+        KMeans km = new KMeans(bits, 3);
         km.converge();
         thresh13 = (km.getTimeUnit(0) + km.getTimeUnit(1)) / 2;
         thresh37 = (km.getTimeUnit(1) + km.getTimeUnit(2)) / 2;
-        String[] ones = fuzzyBits.split("0+");
-        String[] zeros = fuzzyBits.split("1+");
+        if (bits.length() > 5) {
+            thresh13 *= 1.2;
+            thresh37 *= 1.1;
+        }
+        String[] ones = bits.split("0+");
+        String[] zeros = bits.split("1+");
         for (int i = 0; i < zeros.length - 1; i++) {
             morse += nextTeleFuzzy(ones[i], zeros[i + 1]);
         }
-        morse += nextTeleFuzzy(ones[ones.length - 1]);
+        if (ones[0].length() > 0) morse += nextTeleFuzzy(ones[ones.length - 1]);
         return morse;
     }
     
@@ -196,7 +201,7 @@ public class MorseCodeDecoder {
     public static void main(String[] args) {
         String fuzzyBits = "0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000";
 //        MorseCodeDecoder.getTimeUnit(bits);
-        String morse = MorseCodeDecoder.decodeFuzzyBits(fuzzyBits);
+        String morse = MorseCodeDecoder.decodeBitsAdvanced(fuzzyBits);
         System.out.println(morse);
         String msg = MorseCodeDecoder.decodeMorse(morse);
         System.out.println(msg);
