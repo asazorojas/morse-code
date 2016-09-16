@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,22 +31,22 @@ import java.util.Set;
  * @author Michael <GrubenM@GMail.com>
  */
 public class KMeans {
-    
+
     /**
      * KMeans attributes.
      */
+    private boolean converged = false;
     private final Cluster[] clusters;
     private final String[] bitCollection; // for generating frequency dist.
     private float[] timeUnits = {0, 0, 0};
     private final HashMap<Integer, Integer> dist = new HashMap<>();
-    Random rand = new Random();
     List<Integer> keys;
-    
+
     public KMeans(String stream, int numClusters) {
         this.clusters = new Cluster[numClusters];
         stream = stream.replaceAll("^[0]+", ""); // remove leading 0s
         stream = stream.replaceAll("[0]+$", ""); // remove trailing 0s
-        
+
         /**
          * The following if/else block populates this.bitCollection.
          */
@@ -70,7 +71,7 @@ public class KMeans {
                 bitCollection[bitCollection.length - 1] = ones[ones.length - 1];
             }
         }
-        
+
         /**
          * The following for loop populates the this.dist HashMap.
          */
@@ -82,9 +83,19 @@ public class KMeans {
             else dist.put(l, dist.get(l) + 1);
         }
         this.keys = new ArrayList<>(dist.keySet());
-        initializeClusters();
+
+        if (keys.size() == 1 || keys.size() == 2) {
+            timeUnits[0] = keys.get(0);
+            timeUnits[1] = keys.get(0) * 3;
+            timeUnits[2] = keys.get(0) * 7;
+            converged = true;
+        }
+        else {
+            Collections.sort(keys);
+            initializeClusters();
+        }
     }
-    
+
     /**
      * Populates this.clusters with this.numClusters Cluster objects,
      * whose initial locations are from this.keys (the minimum, the
@@ -96,42 +107,7 @@ public class KMeans {
         clusters[1] = new Cluster(
             (keys.get(keys.size() - 1) + keys.get(0)) / 2 + 1);
     }
-    
-    /**
-     * Populates this.clusters with this.numClusters Cluster objects,
-     * whose initial locations are randomly chosen from this.keys
-     * without replacement.
-     */
-    private void initializeClustersRandomly() {
-        Set<Integer> picked = new HashSet<>();
-        int j = 0;
-        while (picked.size() < clusters.length) {
-            int t = keys.get(rand.nextInt(keys.size()));
-            if (!picked.contains(t)) {
-                picked.add(t);
-                clusters[j] = new Cluster(t);
-                j++;
-            }
-        }
-    }
 
-    /**
-     * Sets the location of each Cluster in this.clusters to
-     * a location randomly chosen from this.keys without replacement.
-     */
-    private void randomizeClusters() {
-        Set<Integer> picked = new HashSet<>();
-        int j = 0;
-        while (picked.size() < clusters.length) {
-            int t = keys.get(rand.nextInt(keys.size()));
-            if (!picked.contains(t)) {
-                picked.add(t);
-                clusters[j].setLocation(t);
-                j++;
-            }
-        }
-    }
-    
     /**
      * Assigns cluster-labels to each length-point from the fuzzy input,
      * which is subsequently used by the clusters to re-calculate their
@@ -154,7 +130,7 @@ public class KMeans {
             }
         }
     }
-    
+
     /**
      * Populates this.timeUnits[] with the first, second, and third cluster
      * means, representing the average length of 1 time unit,
@@ -167,11 +143,11 @@ public class KMeans {
         timeUnits[1] = sortedClusters[1].getLocation();
         timeUnits[2] = sortedClusters[2].getLocation();
     }
-    
+
     public void clear() {
         for (Cluster c: clusters) c.clearPoints();
     }
-    
+
     /**
      * Assigns the closest Cluster to each point, calculates the centroid
      * for those Clusters based off of those points, moves the Clusters
@@ -179,75 +155,32 @@ public class KMeans {
      * iteration is the same.
      */
     public void converge() {
-        assignToClosestCluster();
-        do {
-            update();
+        if (!converged) {
             assignToClosestCluster();
-        } while (didChange());
-        calculateTimeUnits();
+            while (!converged) {
+                update();
+                assignToClosestCluster();
+                if (!didChange()) converged = true;
+            }
+            calculateTimeUnits();
+        }
     }
-    
+
     public boolean didChange() {
         for (Cluster c: clusters) if (c.didChange()) return true;
         return false;
     }
-        
+
     public void update() {
         for (Cluster c: clusters) c.update();
     }
-    
+
     /**
      * Getters and Setters.
      *
      */
-    public Cluster[] getClusters() { return this.clusters; }
     public float getTimeUnit(int index) { return this.timeUnits[index]; }
-    
-    /**
-     * Printers.
-     */
-    public void printBitCollection() {
-        for (String s: bitCollection) System.out.println(s);
-    }
-    public void printClusterPoints() {
-        for (Cluster c: clusters) {
-            System.out.println("Points for cluster at " + c.getLocation());
-            c.printPoints();
-        }
-    }
-    public void printClusters() {
-        for (Cluster c: clusters) {
-            System.out.println(c.getLocation());
-        }
-    }
-    public void printDidChange() {
-        System.out.println(didChange());
-    }
-    public void printDistances() {
-        for (Integer i: keys) {
-            float best = -1;
-            float closest = Float.MAX_VALUE;
-            for (Cluster c: clusters) {
-                System.out.print("From cluster at " + c.getLocation());
-                System.out.print(" to point at " + i + " is: ");
-                float d = c.getDistance(i);
-                System.out.println(d);
-                if (d < closest) {
-                    closest = d;
-                    best = c.getLocation();
-                }
-            }
-            System.out.println("Closest to: " + best);
-        }
-    }
-    public void printDistribution() {
-        for (Entry<Integer, Integer> e: dist.entrySet())
-            System.out.println("Length: " + e.getKey() + 
-                    " occurred " + e.getValue() + " times");
-    }
-    public void printKeys() {
-        for (Integer i: keys) System.out.println(i);
-    }
+
     
     /**
      * The Cluster class provides data structures and methods for clusters
