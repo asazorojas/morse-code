@@ -32,86 +32,6 @@ import java.util.Set;
 public class KMeans {
     
     /**
-     * This class provides data structures and methods for clusters
-     * in the KMeans algorithm.
-     */
-    private static class Cluster implements Comparable<Cluster> {
-        private float location;
-        private float centroid;
-        private ArrayList<Integer> currentPoints = new ArrayList<>();
-        private ArrayList<Integer> previousPoints = new ArrayList<>();
-        
-        /**
-         * Constructors
-         */
-        private Cluster(float loc) {
-            location = loc;
-        }
-        
-        private Cluster() {
-            location = -1;
-        }
-        
-        /**
-         * Methods for claiming currentPoints and calculating centroid.
-         */
-        private void addPoint(int i) {
-            currentPoints.add(i);
-        }
-        
-        private boolean didChange() {
-            if (previousPoints.size() != currentPoints.size()) return true;
-            else return !currentPoints.equals(previousPoints);
-        }
-        
-        private void clearPoints() {
-            previousPoints = (ArrayList<Integer>) currentPoints.clone();
-            currentPoints.clear();
-        }
-        
-        /**
-         * After new points have been assigned to this cluster, this method
-         * calculates the new centroid of the cluster and moves the cluster
-         * to that location.
-         */
-        private void update() {
-            float sum = 0;
-            for (Integer p: currentPoints) {
-                sum += p;
-            }
-            centroid = sum / currentPoints.size();
-            setLocation(centroid);
-        }
-                
-        /**
-         * Getters and Setters.
-         */
-        private float getLocation() { return location; }
-        private float getDistance(int point) {
-            return Math.abs(location - point);
-        }
-        private void setLocation(float loc) { location = loc; }
-        
-        /**
-         * Printers.
-         */
-        private void printCentroid() { System.out.println(centroid); }
-        private void printLocation() { System.out.println(location); }
-        private void printPoints() {
-            for (Integer p: currentPoints)
-                System.out.print(p + " ");
-            System.out.println();
-        }
-
-        @Override
-        public int compareTo(Cluster t) {
-            if (this.getLocation() > t.getLocation()) return 1;
-            else if (this.getLocation() < t.getLocation()) return -1;
-            else return 0;
-        }
-    }
-    
-    /**
      * KMeans attributes.
      */
     private final Cluster[] clusters;
@@ -327,6 +247,75 @@ public class KMeans {
     }
     public void printKeys() {
         for (Integer i: keys) System.out.println(i);
+    }
+    
+    /**
+     * The Cluster class provides data structures and methods for clusters
+     * in the KMeans algorithm.
+     */
+    private static class Cluster implements Comparable<Cluster> {
+        private float location;
+        private float centroid;
+        private ArrayList<Integer> currentPoints = new ArrayList<>();
+        private ArrayList<Integer> previousPoints = new ArrayList<>();
+        
+        /**
+         * Constructors
+         */
+        private Cluster(float loc) {
+            location = loc;
+        }
+        
+        private Cluster() {
+            location = -1;
+        }
+        
+        /**
+         * Methods for claiming currentPoints and calculating centroid.
+         */
+        private void addPoint(int i) {
+            currentPoints.add(i);
+        }
+        
+        private boolean didChange() {
+            if (previousPoints.size() != currentPoints.size()) return true;
+            else return !currentPoints.equals(previousPoints);
+        }
+        
+        private void clearPoints() {
+            previousPoints = (ArrayList<Integer>) currentPoints.clone();
+            currentPoints.clear();
+        }
+        
+        /**
+         * After new points have been assigned to this cluster, this method
+         * calculates the new centroid of the cluster and moves the cluster
+         * to that location.
+         */
+        private void update() {
+            float sum = 0;
+            for (Integer p: currentPoints) {
+                sum += p;
+            }
+            centroid = sum / currentPoints.size();
+            setLocation(centroid);
+        }
+                    
+        /**
+         * Getters and Setters.
+         */
+        private float getLocation() { return location; }
+        private float getDistance(int point) {
+            return Math.abs(location - point);
+        }
+        private void setLocation(float loc) { location = loc; }
+        
+        @Override
+        public int compareTo(Cluster t) {
+            if (this.getLocation() > t.getLocation()) return 1;
+            else if (this.getLocation() < t.getLocation()) return -1;
+            else return 0;
+        }
     }
     
     public static void main(String[] args) {
