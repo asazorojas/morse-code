@@ -417,3 +417,5 @@ def bruteThreshholds(fuzzyBits):
             f.write(decodeMorse(morse))
             f.write('\n\n')
 
+if __name__ == "__main__":
+    print(decodeMorse(decodeBitsAdvanced("000000")))
