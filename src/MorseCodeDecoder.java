@@ -43,11 +43,9 @@ public class MorseCodeDecoder {
      * @return 
      */
     private static String nextTeleFuzzy(String one, String zero) {
-        String tele = "";
-        if (one.length() <= thresh13) tele += ".";
-        else tele += "-";
-        if ((zero.length() >= thresh13) && (zero.length() <= thresh37)) tele += " ";
-        else if (zero.length() > thresh37) tele += "   ";
+        String tele = nextTeleFuzzy(one);
+        if ((zero.length() >= thresh13) && (zero.length() < thresh37)) tele += " ";
+        else if (zero.length() >= thresh37) tele += "   ";
         return tele;
     }
     
