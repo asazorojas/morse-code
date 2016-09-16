@@ -5,8 +5,8 @@ This project was completed for the CodeWars [Decode the Morse code, for real](ht
 
 
 ### Branches
-- `master` contains everything in separate class files.
-- `kata` contains the KMeans, Cluster, and helper methods within a single class file.  Use this for [Decode the Morse code, for real](https://www.codewars.com/kata/decode-the-morse-code-for-real/).
+- `master` contains everything in separate class files.  Use this for parts [one](https://www.codewars.com/kata/decode-the-morse-code) and [two](https://www.codewars.com/kata/decode-the-morse-code-advanced) of the Morse Code series.
+- `kata3` contains the KMeans, Cluster, and helper methods within a single class file.  Use this for part [three](https://www.codewars.com/kata/decode-the-morse-code-for-real/) of the Morse Code series.
 
 ### About
 Dots and dashes are handled by a `HashMap` in Java, and by a `dictionary` in Python.
